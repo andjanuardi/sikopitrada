@@ -1,10 +1,4 @@
-import Layout from "@/components/layout/layout";
-
-export default function Home() {
-  return <Layout content={<DakBertahap />} />;
-}
-
-function DakBertahap() {
+export default function DakBertahap() {
   return (
     <div className="flex flex-col gap-5 p-3">
       <div className="flex flex-col gap-1">
@@ -97,20 +91,4 @@ function DakBertahap() {
       </div>
     </div>
   );
-}
-
-import { getSession } from "next-auth/react";
-export async function getServerSideProps({ req }: { req: any }) {
-  const session = await getSession({ req });
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
-  return {
-    props: { session },
-  };
 }
