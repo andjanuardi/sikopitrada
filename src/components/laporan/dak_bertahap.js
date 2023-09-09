@@ -17,7 +17,7 @@ export default function DakBertahap() {
       </div>
       <div className=" overflow-y-auto max-w-[95vw] ">
         <table className="table table-xs">
-          <thead className="text text-center">
+          <thead className="text text-center  text-slate-700">
             <tr>
               <th rowSpan={2}>No.</th>
               <th rowSpan={2} className=" whitespace-break-spaces">
@@ -29,7 +29,7 @@ export default function DakBertahap() {
               </th>
               <th rowSpan={2}>Nilai Kontrak DAK</th>
               <th rowSpan={2}>Pelaksana Kegiatan</th>
-              <th colSpan={3}>Penyaluran</th>
+              <th colSpan={4}>Penyaluran</th>
               <th rowSpan={2}>Realisasi SP2D</th>
               <th rowSpan={2}>No SP2D</th>
               <th rowSpan={2} className=" w-39 ">
@@ -39,6 +39,7 @@ export default function DakBertahap() {
             <tr>
               <th>Tahap I (25%)</th>
               <th>Tahap II (45%)</th>
+              <th>Tahap III (%)</th>
               <th>Tahap III (%)</th>
             </tr>
           </thead>
@@ -61,10 +62,11 @@ export default function DakBertahap() {
               <td>2.166.218.250</td>
               <td>2.166.218.250</td>
               <td>04108/SP2D/2023</td>
+              <td>-</td>
               <td>Sedang Dibuat Untuk itu aja ya, Nantik Baru Dikasih tau</td>
             </tr>
           </tbody>
-          <thead className="text text-center">
+          <thead className="text text-center text-slate-700">
             <tr>
               <th colSpan={4}>Jumlah</th>
               <th>9.044.522.000</th>
@@ -72,19 +74,21 @@ export default function DakBertahap() {
               <th>2.261.130.500</th>
               <th>-</th>
               <th>-</th>
+              <th>-</th>
               <th>2.273.369.000</th>
               <th></th>
               <th></th>
             </tr>
             <tr>
-              <th colSpan={5}>Jumlah</th>
-              <th>9.044.522.000</th>
-              <th></th>
-              <th>2.261.130.500</th>
-              <th>-</th>
-              <th>-</th>
-              <th>2.273.369.000</th>
-              <th></th>
+              <th colSpan={5}></th>
+              <th className=" bg-accent-focus">Transfer</th>
+              <th className=" bg-accent-focus">2.542.505.750</th>
+              <th className=" bg-accent-focus"></th>
+              <th className=" bg-accent-focus"></th>
+              <th className=" bg-neutral-content">Total Transfer</th>
+              <th className=" bg-neutral-content">2.542.505.750</th>
+              <th className=" bg-error">Sisa Transfer</th>
+              <th className=" bg-error">542.505.750</th>
             </tr>
           </thead>
         </table>
