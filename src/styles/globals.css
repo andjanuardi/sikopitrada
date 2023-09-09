@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* .w-menu {
+  @apply [--w-menu: 75vw] md:[--w-menu: 40vw] lg:[--w-menu: 20vw];
+} */
+.swal2-html-container {
+    margin: 0 !important;
+}
+
+:root {
+    --red: rgb(239 68 68);
+    --w-menu: 75vw;
+    --w-menu-open: calc(var(--w-menu) + 100vw);
+    --w-menu-close: calc(var(--w-menu) + 100vw);
+    --w-menu-x-close: calc(var(--w-menu) * -1);
+    --h-menu: 4em;
+}
+
+@screen sm {
+    :root {
+        --w-menu: 60vw;
+        --w-menu-open: calc(var(--w-menu) + 100vw);
+        --w-menu-close: calc(var(--w-menu) + 100vw);
+        --w-menu-x-close: calc(var(--w-menu) * -1);
+    }
+}
+
+@screen md {
+    :root {
+        --w-menu: 35vw;
+        --w-menu-open: 100vw;
+        --w-menu-close: calc(var(--w-menu) + 100vw);
+        --w-menu-x-close: calc(var(--w-menu) * -1);
+    }
+}
+
+@screen lg {
+    :root {
+        --w-menu: 30vw;
+        --w-menu-open: 100vw;
+        --w-menu-close: calc(var(--w-menu) + 100vw);
+        --w-menu-x-close: calc(var(--w-menu) * -1);
+    }
+}
+
+@screen xl {
+    :root {
+        --w-menu: 20vw;
+        --w-menu-open: 100vw;
+        --w-menu-close: calc(var(--w-menu) + 100vw);
+        --w-menu-x-close: calc(var(--w-menu) * -1);
+    }
+}
