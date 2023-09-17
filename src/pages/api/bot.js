@@ -7,8 +7,11 @@ export default async function handler(req, res) {
     const post = req.body;
     const chat_id = post.message.chat.id;
     const command = post.message.chat.text;
-
+    balasPesan("test");
     async function balasPesan(text) {
+      console.log(
+        `https://api.telegram.org/bot2054449112:AAG6dospEMvrj-mZHuoxLikvFSgvNwn00K0/sendMessage?chat_id=${chat_id}&text=${text}`
+      );
       await fetch(
         `https://api.telegram.org/bot2054449112:AAG6dospEMvrj-mZHuoxLikvFSgvNwn00K0/sendMessage?chat_id=${chat_id}&text=${text}`
       )
