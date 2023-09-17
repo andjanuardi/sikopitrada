@@ -7,7 +7,7 @@ export const authOptions = {
   providers: [
     CredentialsProvider({
       async authorize(credentials, req) {
-        const q = `SELECT *,${credentials.ta} as ta FROM  v_user WHERE user='${credentials.user}' AND pass='${credentials.pass}'`;
+        const q = `SELECT *,${credentials.ta} as ta, (select db from t_dbsimda where ta=${credentials.ta}) as db FROM  v_user WHERE user='${credentials.user}' AND pass='${credentials.pass}'`;
 
         const userdata = await dbData(q);
         const user = userdata[0];

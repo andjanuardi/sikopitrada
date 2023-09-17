@@ -50,12 +50,12 @@ export default function App({ Component, pageProps }) {
           }}
           className="flex "
         >
-          <div className="w-[var(--w-menu)]">
+          <div className="w-[var(--w-menu)] grid ">
             <Sidebar setActiveMenu={setActiveMenu} />
           </div>
           <div className="flex-1 flex flex-col ">
             <Navbar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
-            <div className="flex mx-6 my-3 justify-between">
+            <div className="flex mx-6 my-3 justify-between print:hidden">
               {pageData && (
                 <div className="flex gap-2 items-center font-black">
                   {pageData.icon} {pageData.label}

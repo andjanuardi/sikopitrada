@@ -11,23 +11,26 @@ import Swal from "sweetalert2";
 
 export default function Realisasi() {
   const session = useSession();
-  const { data: dataOPD, getData: getDataOPD } = useFetch("/api/opd", "POST", {
-    s: true,
-  });
+  const { data: dataOPD } = useFetch("/api/opd", "POST", { s: true });
   const { data: dataRealisasi, getData: getDataRealisasi } = useFetch(
     "/api/realisasi",
-    "POST"
+    "POST",
+    {
+      s: true,
+      ta: session.data.ta,
+    }
   );
   const { data: dataSumberDana, getData: getDataSumberDana } = useFetch(
     "/api/sumberdana",
-    "POST"
+    "POST",
+    { sdana: true }
   );
 
   const { data: dataKontrak, getData: getDataKontrak } = useSimda(
     "/api/kontrak",
     "POST",
     {
-      db: session.data.db,
+      db: "DB2023",
       tahun: session.data.ta,
       kd_urusan: session.data.kd_urusan,
       kd_bidang: session.data.kd_bidang,
@@ -36,8 +39,7 @@ export default function Realisasi() {
     }
   );
 
-  const [selectedOPD, setSelectedOPD] = useState(session.data.id_opd);
-  const [dataselectedOPD, setDataSelectedOPD] = useState([]);
+  const [selectedOPD, setSelectedOPD] = useState([]);
   const [selectedSdana, setSelectedSdana] = useState(0);
   const [selectedJdana, setSelectedJdana] = useState(0);
   const [selectedBidang, setSelectedBidang] = useState(0);
@@ -46,6 +48,27 @@ export default function Realisasi() {
   const [jdana, setjdana] = useState([]);
   const [bidang, setbidang] = useState([]);
   const [openModal, setopenModal] = useState(false);
+
+  useEffect(() => {
+    // if (session.data.jabatan === 2) {
+    //   setSelectedOPD(dataOPD.filter((e) => e.id === session.data.id_opd));
+    // }
+    if (Object.keys(selectedOPD).length > 0) {
+      getDataSumberDana({ opd: true, id: selectedOPD.id });
+      getDataKontrak({
+        db: "DB2023",
+        tahun: session.data.ta,
+        kd_urusan: selectedOPD.kd_urusan,
+        kd_bidang: selectedOPD.kd_bidang,
+        kd_unit: selectedOPD.kd_unit,
+        kd_sub: selectedOPD.kd_sub,
+      });
+    } else {
+      getDataSumberDana({ sdana: true });
+    }
+    getRealisasi();
+    setSelectedSdana(0);
+  }, [selectedOPD]);
 
   useEffect(() => {
     setsdana(
@@ -96,11 +119,7 @@ export default function Realisasi() {
     if (Object.keys(selectedSBidang).length > 0) {
       getRealisasi("sbidang");
     } else {
-      if (selectedSdana === 0) {
-        getRealisasi("opd");
-      } else {
-        getRealisasi("bidang");
-      }
+      getRealisasi("bidang");
     }
   }, [selectedSBidang]);
 
@@ -110,7 +129,7 @@ export default function Realisasi() {
         getDataRealisasi({
           ta: session.data.ta,
           sdana: true,
-          id_opd: selectedOPD,
+          id_opd: selectedOPD.id,
           id_sdana: parseInt(selectedSdana),
         });
         break;
@@ -118,7 +137,7 @@ export default function Realisasi() {
         getDataRealisasi({
           ta: session.data.ta,
           jdana: true,
-          id_opd: selectedOPD,
+          id_opd: selectedOPD.id,
           id_sdana: parseInt(selectedJdana),
         });
         break;
@@ -126,7 +145,7 @@ export default function Realisasi() {
         getDataRealisasi({
           ta: session.data.ta,
           bidang: true,
-          id_opd: selectedOPD,
+          id_opd: selectedOPD.id,
           id_sdana: parseInt(selectedBidang),
         });
         break;
@@ -134,17 +153,17 @@ export default function Realisasi() {
         getDataRealisasi({
           ta: session.data.ta,
           sbidang: true,
-          id_opd: selectedOPD,
+          id_opd: selectedOPD.id,
           id_sdana: parseInt(selectedSBidang.id),
         });
         break;
 
       default:
-        if (selectedOPD > 0) {
+        if (Object.keys(selectedOPD).length > 0) {
           getDataRealisasi({
             ta: session.data.ta,
             opd: true,
-            id_opd: selectedOPD,
+            id_opd: selectedOPD.id,
           });
         } else {
           getDataRealisasi({
@@ -156,23 +175,8 @@ export default function Realisasi() {
     }
   }
 
-  useEffect(() => {
-    getDataOPD({ s: true });
-    setSelectedOPD(session.data.id_opd);
-  }, []);
-
-  useEffect(() => {
-    if (selectedOPD > 0) {
-      getDataSumberDana({ opd: true, id: selectedOPD });
-      setDataSelectedOPD(dataOPD.filter((e) => e.id === selectedOPD)[0]);
-    } else {
-      getDataSumberDana({ sdana: true });
-    }
-    getRealisasi();
-  }, [selectedOPD]);
-
   return (
-    <div className="lg:p-3 py-2 grid grid-cols-1  ">
+    <div className="lg:p-3 py-2  ">
       <ModalWindow
         open={openModal}
         content={
@@ -180,28 +184,29 @@ export default function Realisasi() {
             sdana={selectedSBidang}
             setopenModal={setopenModal}
             dataKontrak={dataKontrak}
-            selectedOPD={dataselectedOPD}
+            selectedOPD={selectedOPD}
             getDataRealisasi={getDataRealisasi}
-            session={session}
           />
         }
       />
       <div className="flex flex-col gap-2">
         <div className="join w-full">
-          <label className="btn btn-sm join-item">Nama OPD</label>
+          <label className="btn btn-sm join-item">Nama OPD </label>
           <select
             className="select select-bordered join-item select-sm w-full lg:flex-1"
             onChange={(e) => setSelectedOPD(JSON.parse(e.currentTarget.value))}
             value={JSON.stringify(selectedOPD)}
           >
-            {session.data.jabatan != 2 && <option value={0}>SEMUA OPD</option>}
+            {session.data.jabatan != 2 && (
+              <option value={JSON.stringify([])}>SEMUA OPD</option>
+            )}
             {dataOPD &&
               dataOPD
                 .filter((e) =>
                   session.data.jabatan === 2 ? e.id === session.data.id_opd : e
                 )
                 .map((d, k) => (
-                  <option key={k} value={d.id}>
+                  <option key={k} value={JSON.stringify(d)}>
                     {d.nm_sub_unit}
                   </option>
                 ))}
@@ -339,6 +344,7 @@ export default function Realisasi() {
           </div>
         )}
       </div>
+
       <div className="overflow-x-auto">
         <table className=" table table-xs lg:table-sm bg-base-200/20 rounded-none my-2">
           <thead className="bg-black/40 text-white">
@@ -441,9 +447,9 @@ export default function Realisasi() {
                   {Object.keys(selectedSBidang).length > 0 && (
                     <td>
                       <div className="btn-group">
-                        {/* <button className="btn btn-ghost">
+                        <button className="btn btn-ghost">
                           <FaEdit />
-                        </button> */}
+                        </button>
                         <button
                           className="btn btn-ghost"
                           onClick={() =>

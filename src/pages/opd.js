@@ -8,17 +8,19 @@ import { Field, Form, Formik } from "formik";
 import { FaTrash } from "react-icons/fa";
 
 export default function OPD() {
-  const { data: initialData, getData } = useFetch(
-    "http://localhost:3000/api/opd",
-    "POST",
-    { s: true }
-  );
-  const { data: dataOPDSimda } = useFetch(
-    "http://localhost:3001/api/unit",
-    "POST",
-    { db: "DB2023" }
-  );
+  const session = useSession();
+
+  const { data: initialData, getData } = useFetch("/api/opd", "POST", {
+    s: true,
+  });
+  const { data: dataOPDSimda } = useSimda(`/api/unit`, "POST", {
+    db: session.data.db,
+  });
   const [data, setData] = useState([]);
+
+  useEffect(() => {
+    getData({ s: true });
+  }, []);
 
   useEffect(() => {
     setData(initialData);
@@ -53,14 +55,14 @@ export default function OPD() {
             } else {
               Swal.fire("Gagal", "Terjadi kesalahan", "error");
             }
-            getData();
+            getData({ s: true });
           });
       }
     });
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="grid gap-3">
       <span className="p-2 font-bold">
         Daftar Nama OPD Pengguna Dana Transfer
       </span>
@@ -103,7 +105,7 @@ export default function OPD() {
               ))}
             {data &&
               data.map((d, k) => (
-                <tr>
+                <tr key={k}>
                   <td>{k + 1}</td>
                   <td>
                     {d.kd_urusan}.{d.kd_bidang}.{d.kd_unit}.{d.kd_sub}
@@ -149,11 +151,11 @@ function Tambah({ getData, dataOPDSimda }) {
         } else {
           Swal.fire("Gagal", "Terjadi kesalahan", "error");
         }
-        getData();
+        getData({ s: true });
       });
   }
   return (
-    <div className="min-w-[50vw]  mb-6 p-1 flex flex-col gap-4">
+    <div className="min-w-[50vw]  mb-6 p-5 flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div className="text-md font-bold">Tambah</div>
         <div>
@@ -182,7 +184,7 @@ function Tambah({ getData, dataOPDSimda }) {
               dataOPDSimda
                 .filter((e) => cari(e, txtCari))
                 .map((d, k) => (
-                  <tr>
+                  <tr key={k}>
                     <td>
                       {d.kd_urusan}.{d.kd_bidang}.{d.kd_sub}.{d.kd_unit}
                     </td>
@@ -203,7 +205,8 @@ function Tambah({ getData, dataOPDSimda }) {
     </div>
   );
 }
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
+import useSimda from "@/hooks/useSimda";
 export async function getServerSideProps({ req }) {
   const session = await getSession({ req });
   if (!session) {

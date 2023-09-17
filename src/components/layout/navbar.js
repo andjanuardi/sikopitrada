@@ -6,7 +6,7 @@ import { signOut, useSession } from "next-auth/react";
 function Navbar({ activeMenu, setActiveMenu }) {
   const session = useSession();
   return (
-    <div className="flex items-center p-5 h-[var(--h-menu)] shadow-md bg-white ">
+    <div className="flex items-center p-5 h-[var(--h-menu)] shadow-md bg-white print:hidden ">
       <div className="flex-1 flex items-center gap-4   ">
         <label className="btn btn-circle swap swap-rotate ">
           <input
@@ -29,8 +29,12 @@ function Navbar({ activeMenu, setActiveMenu }) {
             width={35}
             className=" h-auto drop-shadow-md mr-3 hidden sm:block"
           />
-          <span className="text-[var(--red)]  ">SIKOPI</span>
-          <span>TRADA</span>
+          <span className=" flex justify-center  items-center   ">
+            SIK
+            <img src="/assets/logo-kopi.png" className="h-[20px]" />
+            PI
+          </span>
+          <span className="text-[var(--red)] ml-1">TRADA</span>
         </div>
       </div>
       <div className="items-center gap-2 flex   ">

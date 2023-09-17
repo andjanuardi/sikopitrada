@@ -1,6 +1,6 @@
 import { FaPlusCircle } from "react-icons/fa";
 import { Field, Form, Formik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiPlusCircle, BiSave, BiSolidPencil, BiTrash } from "react-icons/bi";
 import { TiTimes } from "react-icons/ti";
 import Swal from "sweetalert2";
@@ -11,13 +11,13 @@ import useFetch from "@/hooks/useFetch";
 
 export default function Sumberdana() {
   const session = useSession();
-  const { data: dataOPD } = useFetch("/api/opd", "POST", {
-    s: true,
-  });
+  const { data: dataOPD, getData: getDataOPD } = useFetch("/api/opd", "POST");
+  const { data, getData } = useFetch("/api/sumberdana", "POST");
 
-  const { data, getData } = useFetch("/api/sumberdana", "POST", {
-    s: true,
-  });
+  useEffect(() => {
+    getDataOPD({ s: true });
+    getData({ s: true });
+  }, []);
 
   async function hapus(data, level) {
     let body = {};
@@ -54,257 +54,269 @@ export default function Sumberdana() {
             } else {
               Swal.fire("Gagal", "Terjadi kesalahan", "error");
             }
-            getData();
+            getData({ s: true });
           });
       }
     });
   }
 
   return (
-    <div className="overflow-x-auto ">
-      <table className="table table-xs ">
-        {/* head */}
-        <thead>
-          <tr>
-            <th>Sumber Dana / Jenis Dana / Bidang / Sub Bidang</th>
-            <th className="min-w-[10rem]">OPD</th>
-            <th>Nilai</th>
-            <th className="text-right ">
-              <button
-                className=" join-item btn btn-sm text-white btn-success "
-                onClick={() =>
-                  showModal(<TambahSDana getData={getData} session={session} />)
-                }
-              >
-                <BiPlusCircle className="text-lg" />
-                <span className="hidden lg:block">Tambah </span>
-              </button>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {!data ||
-            (data.length <= 0 && (
-              <tr className="hover">
-                <td colSpan={99} className=" text-center">
-                  Tidak ada data
-                </td>
-              </tr>
-            ))}
-          {data &&
-            data
-              .filter((e) => e.id_sdana === 0)
-              .map((d, k) => (
-                <>
-                  <tr className="hover bg-slate-100/50 font-extrabold">
-                    <td>{d.nama}</td>
-                    <td></td>
-                    <td>
-                      {NumberFormat(
-                        data
-                          .filter((e) => e.id_sdana === d.id)
-                          .reduce((a, b) => a + b.nilai, 0)
-                      )}
-                    </td>
-                    <td className="text-right">
-                      <div className="join">
-                        <button
-                          className="btn btn-sm join-item"
-                          onClick={() =>
-                            showModal(
-                              <TambahJDana getData={getData} initialData={d} />
-                            )
-                          }
-                        >
-                          <FaPlusCircle />
-                        </button>
-                        <button
-                          className="btn btn-sm join-item"
-                          onClick={() =>
-                            showModal(
-                              <UbahSDana getData={getData} initialData={d} />
-                            )
-                          }
-                        >
-                          <BiSolidPencil />
-                        </button>
-                        <button
-                          className="btn btn-sm join-item"
-                          onClick={() => hapus(d, 0)}
-                        >
-                          <BiTrash />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  {data &&
-                    data
-                      .filter((e) => e.id_sdana === d.id && e.id_jdana === 0)
-                      .map((d2, k2) => (
-                        <>
-                          <tr key={k2} className="hover font-bold ">
-                            <td>{d2.nama}</td>
-                            <td></td>
-                            <td>
-                              {NumberFormat(
-                                data
-                                  .filter(
-                                    (e) =>
-                                      e.id_sdana === d.id &&
-                                      e.id_jdana === d2.id
-                                  )
-                                  .reduce((a, b) => a + b.nilai, 0)
-                              )}
-                            </td>
-                            <td className="text-right">
-                              <div className="join">
-                                <button
-                                  className="btn btn-sm join-item"
-                                  onClick={() =>
-                                    showModal(
-                                      <TambahBidang
-                                        getData={getData}
-                                        initialData={d2}
-                                      />
-                                    )
-                                  }
-                                >
-                                  <FaPlusCircle />
-                                </button>
-                                <button
-                                  className="btn btn-sm join-item"
-                                  onClick={() =>
-                                    showModal(
-                                      <UbahJDana
-                                        getData={getData}
-                                        initialData={d2}
-                                      />
-                                    )
-                                  }
-                                >
-                                  <BiSolidPencil />
-                                </button>
-                                <button
-                                  className="btn btn-sm join-item"
-                                  onClick={() => hapus(d2, 1)}
-                                >
-                                  <BiTrash />
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                          {data &&
-                            data
-                              .filter(
-                                (e) =>
-                                  e.id_sdana === d.id &&
-                                  e.id_jdana === d2.id &&
-                                  e.id_bidang === 0
-                              )
-                              .map((d3, k3) => (
-                                <>
-                                  <tr key={k3} className="hover font-semibold">
-                                    <td>{d3.nama}</td>
-                                    <td></td>
-                                    <td>
-                                      {NumberFormat(
-                                        data
-                                          .filter(
-                                            (e) =>
-                                              e.id_sdana === d.id &&
-                                              e.id_jdana === d2.id &&
-                                              e.id_bidang === d3.id
-                                          )
-                                          .reduce((a, b) => a + b.nilai, 0)
-                                      )}
-                                    </td>
-                                    <td className="text-right">
-                                      <div className="join">
-                                        <button
-                                          className="btn btn-sm join-item"
-                                          onClick={() =>
-                                            showModal(
-                                              <TambahSBidang
-                                                getData={getData}
-                                                initialData={d3}
-                                                dataOPD={dataOPD}
-                                              />
-                                            )
-                                          }
-                                        >
-                                          <FaPlusCircle />
-                                        </button>
-                                        <button
-                                          className="btn btn-sm join-item"
-                                          onClick={() =>
-                                            showModal(
-                                              <UbahBidang
-                                                getData={getData}
-                                                initialData={d3}
-                                              />
-                                            )
-                                          }
-                                        >
-                                          <BiSolidPencil />
-                                        </button>
-                                        <button
-                                          className="btn btn-sm join-item"
-                                          onClick={() => hapus(d3, 2)}
-                                        >
-                                          <BiTrash />
-                                        </button>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                  {data &&
-                                    data
-                                      .filter(
-                                        (e) =>
-                                          e.id_sdana === d.id &&
-                                          e.id_jdana === d2.id &&
-                                          e.id_bidang === d3.id
-                                      )
-                                      .map((d4, k4) => (
-                                        <>
-                                          <tr className="hover">
-                                            <td className="pl-4">{d4.nama}</td>
-                                            <td>{d4.nm_sub_unit}</td>
-                                            <td>{NumberFormat(d4.nilai)}</td>
-                                            <td className="text-right">
-                                              <div className="join">
-                                                <button
-                                                  className="btn btn-sm join-item"
-                                                  onClick={() =>
-                                                    showModal(
-                                                      <UbahSBidang
-                                                        getData={getData}
-                                                        initialData={d4}
-                                                        dataOPD={dataOPD}
-                                                      />
-                                                    )
-                                                  }
-                                                >
-                                                  <BiSolidPencil />
-                                                </button>
-                                                <button
-                                                  className="btn btn-sm join-item"
-                                                  onClick={() => hapus(d4, 3)}
-                                                >
-                                                  <BiTrash />
-                                                </button>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                        </>
-                                      ))}
-                                </>
-                              ))}
-                        </>
-                      ))}
-                </>
+    <div className="grid">
+      <div className="overflow-x-auto ">
+        <table className="table table-xs ">
+          {/* head */}
+          <thead>
+            <tr>
+              <th>Sumber Dana / Jenis Dana / Bidang / Sub Bidang</th>
+              <th className="min-w-[10rem]">OPD</th>
+              <th>Nilai</th>
+              <th className="text-right ">
+                <button
+                  className=" join-item btn btn-sm text-white btn-success "
+                  onClick={() =>
+                    showModal(
+                      <TambahSDana getData={getData} session={session} />
+                    )
+                  }
+                >
+                  <BiPlusCircle className="text-lg" />
+                  <span className="hidden lg:block">Tambah </span>
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {!data ||
+              (data.length <= 0 && (
+                <tr className="hover">
+                  <td colSpan={99} className=" text-center">
+                    Tidak ada data
+                  </td>
+                </tr>
               ))}
-        </tbody>
-      </table>
+            {data &&
+              data
+                .filter((e) => e.id_sdana === 0)
+                .map((d, k) => (
+                  <>
+                    <tr className="hover bg-slate-100/50 font-extrabold">
+                      <td>{d.nama}</td>
+                      <td></td>
+                      <td>
+                        {NumberFormat(
+                          data
+                            .filter((e) => e.id_sdana === d.id)
+                            .reduce((a, b) => a + b.nilai, 0)
+                        )}
+                      </td>
+                      <td className="text-right">
+                        <div className="join">
+                          <button
+                            className="btn btn-sm join-item"
+                            onClick={() =>
+                              showModal(
+                                <TambahJDana
+                                  getData={getData}
+                                  initialData={d}
+                                />
+                              )
+                            }
+                          >
+                            <FaPlusCircle />
+                          </button>
+                          <button
+                            className="btn btn-sm join-item"
+                            onClick={() =>
+                              showModal(
+                                <UbahSDana getData={getData} initialData={d} />
+                              )
+                            }
+                          >
+                            <BiSolidPencil />
+                          </button>
+                          <button
+                            className="btn btn-sm join-item"
+                            onClick={() => hapus(d, 0)}
+                          >
+                            <BiTrash />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    {data &&
+                      data
+                        .filter((e) => e.id_sdana === d.id && e.id_jdana === 0)
+                        .map((d2, k2) => (
+                          <>
+                            <tr key={k2} className="hover font-bold ">
+                              <td>{d2.nama}</td>
+                              <td></td>
+                              <td>
+                                {NumberFormat(
+                                  data
+                                    .filter(
+                                      (e) =>
+                                        e.id_sdana === d.id &&
+                                        e.id_jdana === d2.id
+                                    )
+                                    .reduce((a, b) => a + b.nilai, 0)
+                                )}
+                              </td>
+                              <td className="text-right">
+                                <div className="join">
+                                  <button
+                                    className="btn btn-sm join-item"
+                                    onClick={() =>
+                                      showModal(
+                                        <TambahBidang
+                                          getData={getData}
+                                          initialData={d2}
+                                        />
+                                      )
+                                    }
+                                  >
+                                    <FaPlusCircle />
+                                  </button>
+                                  <button
+                                    className="btn btn-sm join-item"
+                                    onClick={() =>
+                                      showModal(
+                                        <UbahJDana
+                                          getData={getData}
+                                          initialData={d2}
+                                        />
+                                      )
+                                    }
+                                  >
+                                    <BiSolidPencil />
+                                  </button>
+                                  <button
+                                    className="btn btn-sm join-item"
+                                    onClick={() => hapus(d2, 1)}
+                                  >
+                                    <BiTrash />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                            {data &&
+                              data
+                                .filter(
+                                  (e) =>
+                                    e.id_sdana === d.id &&
+                                    e.id_jdana === d2.id &&
+                                    e.id_bidang === 0
+                                )
+                                .map((d3, k3) => (
+                                  <>
+                                    <tr
+                                      key={k3}
+                                      className="hover font-semibold"
+                                    >
+                                      <td>{d3.nama}</td>
+                                      <td></td>
+                                      <td>
+                                        {NumberFormat(
+                                          data
+                                            .filter(
+                                              (e) =>
+                                                e.id_sdana === d.id &&
+                                                e.id_jdana === d2.id &&
+                                                e.id_bidang === d3.id
+                                            )
+                                            .reduce((a, b) => a + b.nilai, 0)
+                                        )}
+                                      </td>
+                                      <td className="text-right">
+                                        <div className="join">
+                                          <button
+                                            className="btn btn-sm join-item"
+                                            onClick={() =>
+                                              showModal(
+                                                <TambahSBidang
+                                                  getData={getData}
+                                                  initialData={d3}
+                                                  dataOPD={dataOPD}
+                                                />
+                                              )
+                                            }
+                                          >
+                                            <FaPlusCircle />
+                                          </button>
+                                          <button
+                                            className="btn btn-sm join-item"
+                                            onClick={() =>
+                                              showModal(
+                                                <UbahBidang
+                                                  getData={getData}
+                                                  initialData={d3}
+                                                />
+                                              )
+                                            }
+                                          >
+                                            <BiSolidPencil />
+                                          </button>
+                                          <button
+                                            className="btn btn-sm join-item"
+                                            onClick={() => hapus(d3, 2)}
+                                          >
+                                            <BiTrash />
+                                          </button>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    {data &&
+                                      data
+                                        .filter(
+                                          (e) =>
+                                            e.id_sdana === d.id &&
+                                            e.id_jdana === d2.id &&
+                                            e.id_bidang === d3.id
+                                        )
+                                        .map((d4, k4) => (
+                                          <>
+                                            <tr className="hover">
+                                              <td className="pl-4">
+                                                {d4.nama}
+                                              </td>
+                                              <td>{d4.nm_sub_unit}</td>
+                                              <td>{NumberFormat(d4.nilai)}</td>
+                                              <td className="text-right">
+                                                <div className="join">
+                                                  <button
+                                                    className="btn btn-sm join-item"
+                                                    onClick={() =>
+                                                      showModal(
+                                                        <UbahSBidang
+                                                          getData={getData}
+                                                          initialData={d4}
+                                                          dataOPD={dataOPD}
+                                                        />
+                                                      )
+                                                    }
+                                                  >
+                                                    <BiSolidPencil />
+                                                  </button>
+                                                  <button
+                                                    className="btn btn-sm join-item"
+                                                    onClick={() => hapus(d4, 3)}
+                                                  >
+                                                    <BiTrash />
+                                                  </button>
+                                                </div>
+                                              </td>
+                                            </tr>
+                                          </>
+                                        ))}
+                                  </>
+                                ))}
+                          </>
+                        ))}
+                  </>
+                ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -312,7 +324,7 @@ export default function Sumberdana() {
 function TambahSDana({ getData, session }) {
   const [loading, setLoading] = useState(false);
   return (
-    <div className="min-w-[20vw] mb-6 p-1 flex flex-col gap-4">
+    <div className="min-w-[20vw] mb-6 p-4 flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div className="text-md font-bold">Tambah Sumber Dana</div>
         <div>
@@ -347,7 +359,7 @@ function TambahSDana({ getData, session }) {
               } else {
                 Swal.fire("Gagal", "Terjadi kesalahan", "error");
               }
-              getData();
+              getData({ s: true });
               setLoading(false);
             });
         }}
@@ -410,7 +422,7 @@ function TambahSDana({ getData, session }) {
 function UbahSDana({ getData, initialData }) {
   const [loading, setLoading] = useState(false);
   return (
-    <div className="min-w-[20vw] mb-6 p-1 flex flex-col gap-4">
+    <div className="min-w-[20vw] mb-6 p-4 flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div className="text-md font-bold">Ubah Sumber Dana</div>
         <div>
@@ -445,7 +457,7 @@ function UbahSDana({ getData, initialData }) {
               } else {
                 Swal.fire("Gagal", "Terjadi kesalahan", "error");
               }
-              getData();
+              getData({ s: true });
               setLoading(false);
             });
         }}
@@ -484,7 +496,7 @@ function UbahSDana({ getData, initialData }) {
 function TambahJDana({ getData, initialData }) {
   const [loading, setLoading] = useState(false);
   return (
-    <div className="min-w-[20vw] mb-6 p-1 flex flex-col gap-4">
+    <div className="min-w-[20vw] mb-6 p-4 flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div className="text-md font-bold">Tambah Jenis Dana</div>
         <div>
@@ -519,7 +531,7 @@ function TambahJDana({ getData, initialData }) {
               } else {
                 Swal.fire("Gagal", "Terjadi kesalahan", "error");
               }
-              getData();
+              getData({ s: true });
               setLoading(false);
             });
         }}
@@ -558,7 +570,7 @@ function TambahJDana({ getData, initialData }) {
 function UbahJDana({ getData, initialData }) {
   const [loading, setLoading] = useState(false);
   return (
-    <div className="min-w-[20vw] mb-6 p-1 flex flex-col gap-4">
+    <div className="min-w-[20vw] mb-6 p-4 flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div className="text-md font-bold">Ubah Jenis Dana</div>
         <div>
@@ -593,7 +605,7 @@ function UbahJDana({ getData, initialData }) {
               } else {
                 Swal.fire("Gagal", "Terjadi kesalahan", "error");
               }
-              getData();
+              getData({ s: true });
               setLoading(false);
             });
         }}
@@ -632,7 +644,7 @@ function UbahJDana({ getData, initialData }) {
 function TambahBidang({ getData, initialData }) {
   const [loading, setLoading] = useState(false);
   return (
-    <div className="min-w-[20vw] mb-6 p-1 flex flex-col gap-4">
+    <div className="min-w-[20vw] mb-6 p-4 flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div className="text-md font-bold">Tambah Bidang</div>
         <div>
@@ -667,7 +679,7 @@ function TambahBidang({ getData, initialData }) {
               } else {
                 Swal.fire("Gagal", "Terjadi kesalahan", "error");
               }
-              getData();
+              getData({ s: true });
               setLoading(false);
             });
         }}
@@ -706,7 +718,7 @@ function TambahBidang({ getData, initialData }) {
 function UbahBidang({ getData, initialData }) {
   const [loading, setLoading] = useState(false);
   return (
-    <div className="min-w-[20vw] mb-6 p-1 flex flex-col gap-4">
+    <div className="min-w-[20vw] mb-6 p-4 flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div className="text-md font-bold">Ubah</div>
         <div>
@@ -741,7 +753,7 @@ function UbahBidang({ getData, initialData }) {
               } else {
                 Swal.fire("Gagal", "Terjadi kesalahan", "error");
               }
-              getData();
+              getData({ s: true });
               setLoading(false);
             });
         }}
@@ -780,7 +792,7 @@ function UbahBidang({ getData, initialData }) {
 function TambahSBidang({ getData, initialData, dataOPD }) {
   const [loading, setLoading] = useState(false);
   return (
-    <div className="min-w-[20vw] mb-6 p-1 flex flex-col gap-4">
+    <div className="min-w-[20vw] mb-6 p-4 flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div className="text-md font-bold">Tambah Sub Bidang</div>
         <div>
@@ -819,7 +831,7 @@ function TambahSBidang({ getData, initialData, dataOPD }) {
               } else {
                 Swal.fire("Gagal", "Terjadi kesalahan", "error");
               }
-              getData();
+              getData({ s: true });
               setLoading(false);
             });
         }}
@@ -889,7 +901,7 @@ function TambahSBidang({ getData, initialData, dataOPD }) {
 function UbahSBidang({ getData, initialData, dataOPD }) {
   const [loading, setLoading] = useState(false);
   return (
-    <div className="min-w-[20vw] mb-6 p-1 flex flex-col gap-4">
+    <div className="min-w-[20vw] mb-6 p-4 flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div className="text-md font-bold">Ubah Sub Bidang</div>
         <div>
@@ -924,7 +936,7 @@ function UbahSBidang({ getData, initialData, dataOPD }) {
               } else {
                 Swal.fire("Gagal", "Terjadi kesalahan", "error");
               }
-              getData();
+              getData({ s: true });
               setLoading(false);
             });
         }}

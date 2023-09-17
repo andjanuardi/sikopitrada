@@ -1,4 +1,4 @@
-//@pages/api/t_sdana.js
+//@pages/api/t_penandatangan.js
 
 import { dbData } from "@/models/dbConn";
 
@@ -9,17 +9,18 @@ export default async function handler(req, res) {
     //SELECT
     if (post.s) {
       try {
-        const q = `SELECT * FROM t_opd`;
+        const q = `SELECT * FROM t_penandatangan`;
         const data = await dbData(q);
         res.status(200).json(data);
       } catch (e) {
         res.status(200).json(false);
       }
     }
-    //SINGKRON
-    if (post.singkron) {
+
+    //SELECT AKTIF
+    if (post.aktif) {
       try {
-        const q = `CALL singkronOPD(${post.kd_urusan}, ${post.kd_bidang}, ${post.kd_unit}, ${post.kd_sub}, '${post.nm_sub_unit}')`;
+        const q = `SELECT * FROM t_penandatangan where aktif=1`;
         const data = await dbData(q);
         res.status(200).json(data);
       } catch (e) {
@@ -30,7 +31,7 @@ export default async function handler(req, res) {
     //SELECT BY ID
     if (post.sid) {
       try {
-        const q = `SELECT * FROM t_opd WHERE id=${post.id};`;
+        const q = `SELECT * FROM t_penandatangan WHERE id=${post.id};`;
         const data = await dbData(q);
         res.status(200).json(data);
       } catch (e) {
@@ -41,7 +42,7 @@ export default async function handler(req, res) {
     //INSERT
     if (post.i) {
       try {
-        const q = `INSERT INTO t_opd VALUES( ${post.id}, ${post.kd_urusan}, ${post.kd_bidang}, ${post.kd_unit}, ${post.kd_sub}, '${post.nm_sub_unit}');`;
+        const q = `INSERT INTO t_penandatangan VALUES( ${post.id}, '${post.nama}', '${post.jabatan}', '${post.nip}', '${post.pangkat}', '${post.golongan}', ${post.aktif});`;
         await dbData(q);
         res.status(200).json(true);
       } catch (e) {
@@ -52,18 +53,7 @@ export default async function handler(req, res) {
     //UPDATE
     if (post.e) {
       try {
-        const q = `UPDATE t_opd SET id=${post.id}, kd_urusan=${post.kd_urusan}, kd_bidang=${post.kd_bidang}, kd_unit=${post.kd_unit}, kd_sub=${post.kd_sub}, nm_sub_unit='${post.nm_sub_unit}' WHERE id=${post.id};`;
-        await dbData(q);
-        res.status(200).json(true);
-      } catch (e) {
-        res.status(200).json(false);
-      }
-    }
-
-    //UPDATE PENGGUNA
-    if (post.p) {
-      try {
-        const q = `UPDATE t_opd SET pengguna=${post.pengguna} WHERE id=${post.id};`;
+        const q = `UPDATE t_penandatangan SET id=${post.id}, nama='${post.nama}', jabatan='${post.jabatan}', nip='${post.nip}', pangkat='${post.pangkat}', golongan='${post.golongan}', aktif=${post.aktif} WHERE id=${post.id};`;
         await dbData(q);
         res.status(200).json(true);
       } catch (e) {
@@ -74,7 +64,7 @@ export default async function handler(req, res) {
     //DELETE
     if (post.d) {
       try {
-        const q = `DELETE FROM t_opd WHERE id=${post.id};`;
+        const q = `DELETE FROM t_penandatangan WHERE id=${post.id};`;
         await dbData(q);
         res.status(200).json(true);
       } catch (e) {

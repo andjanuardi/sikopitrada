@@ -10,12 +10,17 @@
 }
 
 :root {
-    --red: rgb(239 68 68);
+    /* --red: rgb(239 68 68); */
+    --red: #cd6133;
     --w-menu: 75vw;
     --w-menu-open: calc(var(--w-menu) + 100vw);
     --w-menu-close: calc(var(--w-menu) + 100vw);
     --w-menu-x-close: calc(var(--w-menu) * -1);
     --h-menu: 4em;
+}
+
+@page {
+    size: landscape;
 }
 
 @screen sm {

@@ -40,11 +40,13 @@ export default function Login() {
             <img className="w-[70px] lg:w-[100px]" src="/assets/logo.png/" />
             <div className="flex flex-col gap-2">
               <div className="flex gap-2 lg:justify-start justify-center">
-                <span className=" font-extrabold text-4xl lg:text-left text-[var(--red)]">
-                  SIKO
+                <span className=" flex justify-center font-extrabold text-4xl lg:text-left  items-center   ">
+                  SIK
+                  <img src="/assets/logo-kopi.png" className="h-[30px]" />
+                  PI
                 </span>
-                <span className="font-extrabold text-4xl lg:text-left">
-                  PITRADA
+                <span className="font-extrabold text-4xl lg:text-left text-[var(--red)]">
+                  TRADA
                 </span>
               </div>
               <div className="flex font-medium lg:text-left">

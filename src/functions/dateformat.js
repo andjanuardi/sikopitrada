@@ -6,6 +6,29 @@ export function dateNow() {
   return res;
 }
 
+export const bulanStr = [
+  "Januari",
+  "Februari",
+  "Maret",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Agustus",
+  "September",
+  "Oktober",
+  "November",
+  "Desember",
+];
+
+export function dateNowBulanStr() {
+  let res = new Date();
+  res = `${res.getDate() < 10 ? "0" + res.getDate() : res.getDate()} ${
+    bulanStr[res.getMonth()]
+  } ${res.getFullYear()}`;
+  return res;
+}
+
 export function monthNow() {
   let res = new Date();
   res = `${res.getFullYear()}-${

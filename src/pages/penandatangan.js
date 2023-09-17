@@ -1,68 +1,30 @@
+import { dateNow, dateToSQL, dateToTable } from "@/functions/dateformat";
 import { closeModal, showModal } from "@/functions/swal";
-import useFetch from "@/hooks/useFetch";
-
 import { Field, Form, Formik } from "formik";
+import { getSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import {
-  BiKey,
-  BiPlusCircle,
-  BiSave,
-  BiSolidPencil,
-  BiTrash,
-} from "react-icons/bi";
+import { BiPlusCircle, BiSave, BiSolidPencil, BiTrash } from "react-icons/bi";
 import { TiTimes } from "react-icons/ti";
 import Swal from "sweetalert2";
 
-export default function Pengguna() {
+export default function BackEnd() {
+  const [initialData, setInitialData] = useState([]);
   const [data, setData] = useState([]);
-  const { data: dataOPD, getData: getDataOPD } = useFetch("/api/opd", "POST");
-  const { data: initialData, getData } = useFetch("/api/user", "POST");
 
   useEffect(() => {
-    getData({ s: true });
-    getDataOPD({ s: true });
+    getData();
   }, []);
 
-  useEffect(() => {
-    setData(initialData);
-  }, [initialData]);
-
-  function gantiPass(id) {
-    Swal.fire({
-      title: "Ganti Password ?",
-      text: "Masukkan password baru",
-      input: "password",
-      icon: "question",
-      inputValidator: (val) => {
-        if (!val) {
-          return "Data tidak boleh kosong ";
-        }
-      },
-      showCancelButton: true,
-      confirmButtonText: "Simpan",
-      cancelButtonText: "Batal",
-    }).then(async (d) => {
-      if (d.isConfirmed) {
-        await fetch("/api/user", {
-          method: "POST",
-          body: JSON.stringify({
-            p: true,
-            id: id,
-            pass: d.value,
-          }),
-        })
-          .then((e) => e.json())
-          .then((data) => {
-            if (data) {
-              data;
-              Swal.fire("Sukses", "Password berhasil di ubah", "success");
-              getData({ s: true });
-            } else {
-              Swal.fire("Gagal", "Oops terjadi kesalahan", "error");
-            }
-          });
-      }
-    });
+  async function getData() {
+    await fetch("/api/penandatangan", {
+      method: "POST",
+      body: JSON.stringify({ s: true }),
+    })
+      .then((e) => e.json())
+      .then((data) => {
+        setInitialData(data);
+        setData(data);
+      });
   }
 
   async function hapus(data) {
@@ -75,7 +37,7 @@ export default function Pengguna() {
       confirmButtonText: "Hapus",
     }).then(async (e) => {
       if (e.isConfirmed) {
-        await fetch("/api/user", {
+        await fetch("/api/penandatangan", {
           method: "POST",
           body: JSON.stringify({ d: true, id: data.id }),
         })
@@ -86,7 +48,7 @@ export default function Pengguna() {
             } else {
               Swal.fire("Gagal", "Terjadi kesalahan", "error");
             }
-            getData({ s: true });
+            getData();
           });
       }
     });
@@ -101,7 +63,7 @@ export default function Pengguna() {
   }
 
   return (
-    <div className="grid gap-3">
+    <div className="grid grid-cols-1 gap-3">
       <div className="join flex ">
         <input
           className=" flex-1 join-item input input-bordered "
@@ -110,25 +72,21 @@ export default function Pengguna() {
         />
         <button
           className=" join-item btn btn-success"
-          onClick={() =>
-            showModal(<Tambah getData={getData} dataOPD={dataOPD} />)
-          }
+          onClick={() => showModal(<Tambah getData={getData} />)}
         >
           <BiPlusCircle />
           Tambah
         </button>
       </div>
-
       <div className="overflow-x-auto">
         <table className="table">
           {/* head */}
           <thead>
             <tr>
               <th>No</th>
-              <th>OPD</th>
-              <th>Nama / NIP</th>
-              <th>Nama Pengguna</th>
+              <th>Nama/Nip/Pangkat/Golongan</th>
               <th>Jabatan</th>
+              <th>Aktif</th>
             </tr>
           </thead>
           <tbody>
@@ -144,37 +102,21 @@ export default function Pengguna() {
               data.map((d, k) => (
                 <tr key={k}>
                   <td>{k + 1}</td>
-                  <td>{d.nm_sub_unit}</td>
                   <td>
-                    {d.nama}
+                    <strong>{d.nama}</strong>
                     <br />
-                    <small>NIP. {d.nip}</small>
+                    {d.nip}
+                    <br />
+                    {d.pangkat} ({d.golongan})
                   </td>
-                  <td>{d.user}</td>
+                  <td>{d.jabatan}</td>
+                  <td>{d.aktif ? "Aktif" : "Tidak Aktif"}</td>
                   <td>
-                    {d.jabatan === 1 && "Administrator"}
-                    {d.jabatan === 2 && "Operator"}
-                    {d.jabatan === 3 && "Auditor"}
-                  </td>
-
-                  <td className="text-right">
                     <div className="join">
-                      <button
-                        className="btn btn-sm join-item btn-primary"
-                        onClick={() => gantiPass(d.id)}
-                      >
-                        <BiKey />
-                      </button>
                       <button
                         className="btn btn-sm join-item"
                         onClick={() =>
-                          showModal(
-                            <Ubah
-                              getData={getData}
-                              initialData={d}
-                              dataOPD={dataOPD}
-                            />
-                          )
+                          showModal(<Ubah getData={getData} initialData={d} />)
                         }
                       >
                         <BiSolidPencil />
@@ -196,10 +138,10 @@ export default function Pengguna() {
   );
 }
 
-function Tambah({ getData, dataOPD }) {
+function Tambah({ getData }) {
   const [loading, setLoading] = useState(false);
   return (
-    <div className="min-w-[20vw] mb-6 p-5 flex flex-col gap-4">
+    <div className="min-w-[50vw] mb-6 p-5 flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div className="text-md font-bold">Tambah</div>
         <div>
@@ -213,16 +155,16 @@ function Tambah({ getData, dataOPD }) {
         initialValues={{
           i: true,
           id: null,
-          id_opd: 1,
           nama: "",
+          jabatan: "",
           nip: "",
-          user: "",
-          pass: "",
-          jabatan: 2,
+          pangkat: "",
+          golongan: "",
+          aktif: 0,
         }}
         onSubmit={async (values) => {
           setLoading(true);
-          await fetch("/api/user", {
+          await fetch("/api/penandatangan", {
             method: "POST",
             body: JSON.stringify(values),
           })
@@ -233,7 +175,7 @@ function Tambah({ getData, dataOPD }) {
               } else {
                 Swal.fire("Gagal", "Terjadi kesalahan", "error");
               }
-              getData({ s: true });
+              getData();
               setLoading(false);
             });
         }}
@@ -242,7 +184,7 @@ function Tambah({ getData, dataOPD }) {
           <div>
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Nama</span>
+                <span className="label-text">nama</span>
               </label>
               <Field
                 required
@@ -254,73 +196,65 @@ function Tambah({ getData, dataOPD }) {
             </div>
             <div className="form-control">
               <label className="label">
-                <span className="label-text">NIP</span>
+                <span className="label-text">jabatan</span>
               </label>
               <Field
                 required
                 type=""
-                placeholder="Masukkan nip"
+                placeholder="Masukkan nama"
+                className="input input-bordered input-sm"
+                name="jabatan"
+              />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">nip</span>
+              </label>
+              <Field
+                required
+                type=""
+                placeholder="Masukkan nama"
                 className="input input-bordered input-sm"
                 name="nip"
               />
             </div>
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Nama Pengguna</span>
+                <span className="label-text">pangkat</span>
               </label>
               <Field
                 required
                 type=""
-                placeholder="Masukkan nama pengguna"
+                placeholder="Masukkan nama"
                 className="input input-bordered input-sm"
-                name="user"
+                name="pangkat"
               />
             </div>
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Password</span>
+                <span className="label-text">golongan</span>
               </label>
               <Field
                 required
-                type="password"
-                placeholder="Masukkan password"
+                type=""
+                placeholder="Masukkan nama"
                 className="input input-bordered input-sm"
-                name="pass"
+                name="golongan"
               />
             </div>
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Jabatan</span>
+                <span className="label-text">aktif</span>
               </label>
               <Field
-                required
                 as="select"
-                placeholder="Pilih jabatan"
-                className="select select-bordered select-sm"
-                name="jabatan"
-              >
-                <option value={1}>Administrator</option>
-                <option value={2}>Operator</option>
-                <option value={3}>Auditor</option>
-              </Field>
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Nama OPD</span>
-              </label>
-              <Field
                 required
-                as="select"
-                placeholder="Pilih OPD"
+                placeholder="Masukkan nama"
                 className="select select-bordered select-sm"
-                name="id_opd"
+                name="aktif"
               >
-                {dataOPD &&
-                  dataOPD.map((d, k) => (
-                    <option key={k} value={`${d.id}`}>
-                      {d.nm_sub_unit}
-                    </option>
-                  ))}
+                <option value={1}>Aktif</option>
+                <option value={0}>Non Aktif</option>
               </Field>
             </div>
           </div>
@@ -340,10 +274,10 @@ function Tambah({ getData, dataOPD }) {
   );
 }
 
-function Ubah({ getData, initialData, dataOPD }) {
+function Ubah({ getData, initialData }) {
   const [loading, setLoading] = useState(false);
   return (
-    <div className="min-w-[20vw] mb-6 p-5 flex flex-col gap-4">
+    <div className="min-w-[50vw] mb-6 p-5 flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div className="text-md font-bold">Ubah</div>
         <div>
@@ -357,15 +291,16 @@ function Ubah({ getData, initialData, dataOPD }) {
         initialValues={{
           e: true,
           id: initialData.id,
-          id_opd: initialData.id_opd,
           nama: initialData.nama,
-          nip: initialData.nip,
-          user: initialData.user,
           jabatan: initialData.jabatan,
+          nip: initialData.nip,
+          pangkat: initialData.pangkat,
+          golongan: initialData.golongan,
+          aktif: initialData.aktif,
         }}
         onSubmit={async (values) => {
           setLoading(true);
-          await fetch("/api/user", {
+          await fetch("/api/penandatangan", {
             method: "POST",
             body: JSON.stringify(values),
           })
@@ -376,7 +311,7 @@ function Ubah({ getData, initialData, dataOPD }) {
               } else {
                 Swal.fire("Gagal", "Terjadi kesalahan", "error");
               }
-              getData({ s: true });
+              getData();
               setLoading(false);
             });
         }}
@@ -385,7 +320,7 @@ function Ubah({ getData, initialData, dataOPD }) {
           <div>
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Nama</span>
+                <span className="label-text">nama</span>
               </label>
               <Field
                 required
@@ -397,61 +332,65 @@ function Ubah({ getData, initialData, dataOPD }) {
             </div>
             <div className="form-control">
               <label className="label">
-                <span className="label-text">NIP</span>
+                <span className="label-text">jabatan</span>
               </label>
               <Field
                 required
                 type=""
-                placeholder="Masukkan nip"
+                placeholder="Masukkan nama"
+                className="input input-bordered input-sm"
+                name="jabatan"
+              />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">nip</span>
+              </label>
+              <Field
+                required
+                type=""
+                placeholder="Masukkan nama"
                 className="input input-bordered input-sm"
                 name="nip"
               />
             </div>
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Nama Pengguna</span>
+                <span className="label-text">pangkat</span>
               </label>
               <Field
                 required
                 type=""
-                placeholder="Masukkan nama pengguna"
+                placeholder="Masukkan nama"
                 className="input input-bordered input-sm"
-                name="user"
+                name="pangkat"
               />
             </div>
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Jabatan</span>
+                <span className="label-text">golongan</span>
               </label>
               <Field
                 required
-                as="select"
-                placeholder="Pilih jabatan"
-                className="select select-bordered select-sm"
-                name="jabatan"
-              >
-                <option value={1}>Administrator</option>
-                <option value={2}>Operator</option>
-                <option value={3}>Auditor</option>
-              </Field>
+                type=""
+                placeholder="Masukkan nama"
+                className="input input-bordered input-sm"
+                name="golongan"
+              />
             </div>
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Nama OPD</span>
+                <span className="label-text">aktif</span>
               </label>
               <Field
-                required
                 as="select"
-                placeholder="Pilih OPD"
+                required
+                placeholder="Masukkan nama"
                 className="select select-bordered select-sm"
-                name="id_opd"
+                name="aktif"
               >
-                {dataOPD &&
-                  dataOPD.map((d, k) => (
-                    <option key={k} value={`${d.id}`}>
-                      {d.nm_sub_unit}
-                    </option>
-                  ))}
+                <option value={1}>Aktif</option>
+                <option value={0}>Non Aktif</option>
               </Field>
             </div>
           </div>
@@ -462,7 +401,7 @@ function Ubah({ getData, initialData, dataOPD }) {
               ) : (
                 <BiSave />
               )}
-              Simpan
+              Ubah
             </button>
           </div>
         </Form>
@@ -471,7 +410,6 @@ function Ubah({ getData, initialData, dataOPD }) {
   );
 }
 
-import { getSession } from "next-auth/react";
 export async function getServerSideProps({ req }) {
   const session = await getSession({ req });
   if (!session) {

@@ -4,9 +4,9 @@ import Swal from "sweetalert2";
 const useFetch = (url = "/api/hello", method = "POST", body = {}) => {
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    getData(body);
-  }, [body]);
+  // useEffect(() => {
+  //   getData(body);
+  // }, [url]);
 
   async function getData(body) {
     try {

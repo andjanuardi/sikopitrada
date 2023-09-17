@@ -4,6 +4,7 @@ import {
   FaHistory,
   FaHome,
   FaMoneyBill,
+  FaSignature,
   FaUser,
   FaUsers,
 } from "react-icons/fa";
@@ -18,24 +19,28 @@ export const listMenu = [
   { label: "Beranda", icon: <FaHome />, link: "/" },
   { label: "Daftar OPD", icon: <FaBuilding />, link: "/opd" },
   { label: "Sumber Dana", icon: <FaMoneyBill />, link: "/sumberdana" },
-  {
-    label: "Daftar Kontrak",
-    icon: <IoDocumentAttachSharp />,
-    link: "/kontrak",
-  },
   { label: "Realisasi", icon: <FaChartBar />, link: "/realisasi" },
   { label: "Laporan", icon: <BiPrinter />, link: "/laporan" },
+  { label: "Penandatangan", icon: <FaSignature />, link: "/penandatangan" },
   { label: "Pengguna", icon: <FaUsers />, link: "/pengguna" },
   { label: "Pengaturan", icon: <BiCog />, link: "/pengaturan" },
-  { label: "Log", icon: <FaHistory />, link: "/log" },
+  // { label: "Log", icon: <FaHistory />, link: "/log" },
 ];
 
-function Sidebar({ setActivePage }) {
+export const lisMenuUser = [
+  { label: "Beranda", icon: <FaHome />, link: "/" },
+  { label: "Realisasi", icon: <FaChartBar />, link: "/realisasi" },
+  { label: "Laporan", icon: <BiPrinter />, link: "/laporan" },
+  { label: "Penandatangan", icon: <FaSignature />, link: "/penandatangan" },
+];
+function Sidebar({ setActiveMenu }) {
   const session = useSession();
   const router = useRouter();
+  console.log(listMenu);
+  console.log(lisMenuUser);
   return (
     <>
-      <div className="bg-[var(--red)] flex flex-col h-[100dvh]  relative ">
+      <div className="bg-[var(--red)] flex flex-col min-h-screen  relative ">
         <div className="px-6  shadow-md  flex flex-col ">
           <div className="flex gap-3 text-white items-center h-[var(--h-menu)]">
             <Image
@@ -46,9 +51,13 @@ function Sidebar({ setActivePage }) {
               className=" h-auto drop-shadow-md"
             />
             <div>
-              <div className="font-black pt-2 text-[20pt] leading-5 text-white  whitespace-nowrap">
-                <span>SIKOPI</span>
-                <span className="text-black">TRADA</span>
+              <div className="font-black flex pt-2 text-[20pt] leading-5 text-white  whitespace-nowrap">
+                <span className=" flex justify-center  items-center   ">
+                  SIK
+                  <img src="/assets/logo-kopi.png" className="h-[20px]" />
+                  PI
+                </span>
+                <span className="text-white/90 ml-1">TRADA</span>
               </div>
               <span className="text-sm font-semibold">BPKD Kab. Simeulue</span>
             </div>
@@ -73,26 +82,33 @@ function Sidebar({ setActivePage }) {
         </div>
         <div className="py-5   flex flex-col   flex-1 overflow-x-hidden overflow-y-auto bg-white/10">
           <ul className="menu  p-0   pl-5  rounded-none bg-transparent text-white w-full  ">
-            {listMenu.map((d, k) => (
-              <motion.li
-                animate={{ opacity: 1 }}
-                whileHover={{ scale: 1.1 }}
-                key={k}
-                className="font-bold my-1 "
-                onClick={() => {
-                  router.push(d.link);
-                }}
-              >
-                <a
-                  className={`px-6 py-2   ${
-                    router.pathname === d.link &&
-                    "bg-white text-black hover:!bg-white hover:!text-black "
-                  }   hover:bg-black/10 hover:text-white active:!bg-white active:!text-black  rounded-none rounded-l-full `}
+            {listMenu
+              .filter((e) =>
+                session.data && session.data.jabatan != 1
+                  ? lisMenuUser.some((s) => s.label === e.label)
+                  : e
+              )
+              .map((d, k) => (
+                <motion.li
+                  animate={{ opacity: 1 }}
+                  whileHover={{ scale: 1.1 }}
+                  key={k}
+                  className="font-bold my-1 "
+                  onClick={() => {
+                    router.push(d.link);
+                    setActiveMenu(false);
+                  }}
                 >
-                  {d.icon} {d.label}
-                </a>
-              </motion.li>
-            ))}
+                  <a
+                    className={`px-6 py-2   ${
+                      router.pathname === d.link &&
+                      "bg-white text-black hover:!bg-white hover:!text-black "
+                    }   hover:bg-black/10 hover:text-white active:!bg-white active:!text-black  rounded-none rounded-l-full `}
+                  >
+                    {d.icon} {d.label}
+                  </a>
+                </motion.li>
+              ))}
           </ul>
         </div>
         <div className="text-white  text-xs drop-shadow  text-center leading-2 px-5 py-2 ">

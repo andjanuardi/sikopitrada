@@ -6,7 +6,6 @@ function InputSearch({ data = [] }) {
 
   useEffect(() => {
     setInput(selectedText);
-    console.log("ok");
   }, [selectedText]);
 
   return (

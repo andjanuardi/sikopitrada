@@ -33,11 +33,20 @@ const useSimda = (url = "/api/hello", method = "POST", body = {}) => {
             if (d) {
               setData(d);
             } else {
-              Swal.fire("Opps", `Terjadi Kesalahan`, "error");
+              Swal.fire(
+                "Opps",
+                `Terjadi Kesalahan Gagal Menghubungkan ke Data SIMDA cek Pengaturan Database`,
+                "error"
+              );
             }
           })
           .then((err) => {
-            err != undefined && Swal.fire("Opps", `Terjadi Kesalahan`, "error");
+            err != undefined &&
+              Swal.fire(
+                "Opps",
+                `Terjadi Kesalahan Gagal Menghubungkan ke Data SIMDA cek Pengaturan Database`,
+                "error"
+              );
           }));
     } catch (error) {
       console.log("🚀 ~ file: useFetch.js:40 ~ getData ~ error:", error);
