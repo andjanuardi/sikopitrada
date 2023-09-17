@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "npm run build",
+    "start2": "npx next start -p 3004",
     "lint": "next lint"
   },
   "dependencies": {
@@ -31,6 +32,7 @@
     "sweetalert2": "^11.7.27",
     "sweetalert2-react-content": "^5.0.7",
     "tailwindcss": "3.3.3",
+    "telegraf": "^4.13.1",
     "xlsx": "^0.18.5"
   }
 }

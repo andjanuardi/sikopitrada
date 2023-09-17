@@ -36,8 +36,6 @@ export const lisMenuUser = [
 function Sidebar({ setActiveMenu }) {
   const session = useSession();
   const router = useRouter();
-  console.log(listMenu);
-  console.log(lisMenuUser);
   return (
     <>
       <div className="bg-[var(--red)] flex flex-col min-h-screen  relative ">
