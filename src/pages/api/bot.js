@@ -6,14 +6,11 @@ export default async function handler(req, res) {
   try {
     const post = req.body;
     const chat_id = post.message.chat.id;
-    const command = post.message.chat.text;
-    balasPesan("test");
+    const command = post.message.text;
+
     async function balasPesan(text) {
-      console.log(
-        `https://api.telegram.org/bot6508265956:AAFNPzJM0khraN874_JTng73t8-A0DMFCnw/sendMessage?chat_id=${chat_id}&text=${text}`
-      );
       await fetch(
-        `https://api.telegram.org/bot6508265956:AAFNPzJM0khraN874_JTng73t8-A0DMFCnw/sendMessage?chat_id=${chat_id}&text=${text}`
+        `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage?chat_id=${chat_id}&text=${text}`
       )
         .then((e) => e.json())
         .then((d) => console.log(d));
@@ -26,7 +23,7 @@ export default async function handler(req, res) {
 
     if (command === "/info") {
       stat[0].map((d) => {
-        balasPesan(
+        const pesan = encodeURIComponent(
           `${d.nama_sdana}\n${d.nama_jdana}\n${d.nama_bidang}\n${
             d.nama_sbidang
           }\n${d.nama_sbidang}\nPagu: Rp.${new Intl.NumberFormat(
@@ -37,6 +34,7 @@ export default async function handler(req, res) {
             "Id-ID"
           ).format(d.persentase)}%`
         );
+        balasPesan(pesan);
       });
     }
     res.status(200).json(true);
