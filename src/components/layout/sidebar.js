@@ -11,9 +11,16 @@ import {
 import { IoDocumentAttachSharp } from "react-icons/io5";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { BiChart, BiCog, BiPrinter, BiTransfer } from "react-icons/bi";
+import {
+  BiChart,
+  BiCog,
+  BiLogoTelegram,
+  BiPrinter,
+  BiTransfer,
+} from "react-icons/bi";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 export const listMenu = [
   { label: "Beranda", icon: <FaHome />, link: "/" },
@@ -24,6 +31,12 @@ export const listMenu = [
   { label: "Penandatangan", icon: <FaSignature />, link: "/penandatangan" },
   { label: "Pengguna", icon: <FaUsers />, link: "/pengguna" },
   { label: "Pengaturan", icon: <BiCog />, link: "/pengaturan" },
+  {
+    label: "Telegram",
+    icon: <BiLogoTelegram />,
+    link: "https://t.me/SIKOPITRADA_BOT",
+    target: "_blank",
+  },
   // { label: "Log", icon: <FaHistory />, link: "/log" },
 ];
 
@@ -32,6 +45,12 @@ export const lisMenuUser = [
   { label: "Realisasi", icon: <FaChartBar />, link: "/realisasi" },
   { label: "Laporan", icon: <BiPrinter />, link: "/laporan" },
   { label: "Penandatangan", icon: <FaSignature />, link: "/penandatangan" },
+  {
+    label: "Telegram",
+    icon: <BiLogoTelegram />,
+    link: "https://t.me/SIKOPITRADA_BOT",
+    target: "_blank",
+  },
 ];
 function Sidebar({ setActiveMenu }) {
   const session = useSession();
@@ -94,17 +113,19 @@ function Sidebar({ setActiveMenu }) {
                   className="font-bold my-1 "
                   onClick={() => {
                     router.push(d.link);
-                    setActiveMenu(false);
+                    // setActiveMenu(false);
                   }}
                 >
-                  <a
+                  <Link
+                    href={d.link}
+                    target={d.target === "_blank" ? "_blank" : ""}
                     className={`px-6 py-2   ${
                       router.pathname === d.link &&
                       "bg-white text-black hover:!bg-white hover:!text-black "
                     }   hover:bg-black/10 hover:text-white active:!bg-white active:!text-black  rounded-none rounded-l-full `}
                   >
                     {d.icon} {d.label}
-                  </a>
+                  </Link>
                 </motion.li>
               ))}
           </ul>
