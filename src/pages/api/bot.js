@@ -28,8 +28,18 @@ export default async function handler(req, res) {
             d.nama_sbidang
           }\n\nPagu: Rp.${new Intl.NumberFormat("Id-ID").format(
             d.nilai_pagu
+          )},-\nTahap I: Rp.${new Intl.NumberFormat("Id-ID").format(
+            d.tahap1
+          )},-\nTahap II: Rp.${new Intl.NumberFormat("Id-ID").format(
+            d.tahap2
+          )},-\nTahap III: Rp.${new Intl.NumberFormat("Id-ID").format(
+            d.tahap3
+          )},-\nTahap IV: Rp.${new Intl.NumberFormat("Id-ID").format(
+            d.tahap4
           )},-\nRealisasi: Rp.${new Intl.NumberFormat("Id-ID").format(
             d.nilaitotal
+          )},-\nSisa: Rp.${new Intl.NumberFormat("Id-ID").format(
+            d.sisa
           )},-\nPersentase: ${new Intl.NumberFormat("Id-ID").format(
             d.persentase
           )}%`
