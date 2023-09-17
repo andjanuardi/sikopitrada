@@ -29,13 +29,13 @@ export default async function handler(req, res) {
           }\n\nPagu: Rp.${new Intl.NumberFormat("Id-ID").format(
             d.nilai_pagu
           )},-\nTahap I: Rp.${new Intl.NumberFormat("Id-ID").format(
-            d.tahap1
+            d.nilai1
           )},-\nTahap II: Rp.${new Intl.NumberFormat("Id-ID").format(
-            d.tahap2
+            d.nilai2
           )},-\nTahap III: Rp.${new Intl.NumberFormat("Id-ID").format(
-            d.tahap3
+            d.nilai3
           )},-\nTahap IV: Rp.${new Intl.NumberFormat("Id-ID").format(
-            d.tahap4
+            d.nilai4
           )},-\nRealisasi: Rp.${new Intl.NumberFormat("Id-ID").format(
             d.nilaitotal
           )},-\nSisa: Rp.${new Intl.NumberFormat("Id-ID").format(
