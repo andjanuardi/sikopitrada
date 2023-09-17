@@ -11,7 +11,9 @@ export default async function handler(req, res) {
     async function balasPesan(text) {
       await fetch(
         `https://api.telegram.org/bot2054449112:AAG6dospEMvrj-mZHuoxLikvFSgvNwn00K0/sendMessage?chat_id=${chat_id}&text=${text}`
-      );
+      )
+        .then((e) => e.json())
+        .then((d) => console.log(d));
     }
 
     const qstat = `CALL stat(${new Date().getFullYear()})`;
