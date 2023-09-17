@@ -19,6 +19,10 @@ function Print() {
     ? JSON.parse(data.selectedSBidang)
     : [];
 
+  useEffect(() => {
+    window.print();
+  }, [dataRealisasi]);
+
   return (
     <div className="bg-white">
       <table className="w-full table-xs">
