@@ -26,14 +26,15 @@ export default async function handler(req, res) {
         const pesan = encodeURIComponent(
           `${d.nama_sdana}\n${d.nama_jdana}\n${d.nama_bidang}\n${
             d.nama_sbidang
-          }\n${d.nama_sbidang}\nPagu: Rp.${new Intl.NumberFormat(
-            "Id-ID"
-          ).format(d.nilai_pagu)},-\nRealisasi: Rp.${new Intl.NumberFormat(
-            "Id-ID"
-          ).format(d.nilaitotal)},-\nPersentase: ${new Intl.NumberFormat(
-            "Id-ID"
-          ).format(d.persentase)}%`
+          }\nPagu: Rp.${new Intl.NumberFormat("Id-ID").format(
+            d.nilai_pagu
+          )},-\nRealisasi: Rp.${new Intl.NumberFormat("Id-ID").format(
+            d.nilaitotal
+          )},-\nPersentase: ${new Intl.NumberFormat("Id-ID").format(
+            d.persentase
+          )}%`
         );
+
         balasPesan(pesan);
       });
     }
