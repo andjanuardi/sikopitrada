@@ -32,7 +32,6 @@
     "sweetalert2": "^11.7.27",
     "sweetalert2-react-content": "^5.0.7",
     "tailwindcss": "3.3.3",
-    "telegraf": "^4.13.1",
     "xlsx": "^0.18.5"
   }
 }
