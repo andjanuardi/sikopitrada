@@ -10,10 +10,10 @@ export default async function handler(req, res) {
     balasPesan("test");
     async function balasPesan(text) {
       console.log(
-        `https://api.telegram.org/bot2054449112:AAG6dospEMvrj-mZHuoxLikvFSgvNwn00K0/sendMessage?chat_id=${chat_id}&text=${text}`
+        `https://api.telegram.org/bot6508265956:AAFNPzJM0khraN874_JTng73t8-A0DMFCnw/sendMessage?chat_id=${chat_id}&text=${text}`
       );
       await fetch(
-        `https://api.telegram.org/bot2054449112:AAG6dospEMvrj-mZHuoxLikvFSgvNwn00K0/sendMessage?chat_id=${chat_id}&text=${text}`
+        `https://api.telegram.org/bot6508265956:AAFNPzJM0khraN874_JTng73t8-A0DMFCnw/sendMessage?chat_id=${chat_id}&text=${text}`
       )
         .then((e) => e.json())
         .then((d) => console.log(d));
