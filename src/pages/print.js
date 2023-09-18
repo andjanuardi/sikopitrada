@@ -28,7 +28,7 @@ function Print() {
 
   return (
     <div className="bg-white">
-      <table className="w-full table-xs">
+      <table className="w-full table-xs ">
         <tbody>
           <tr>
             <td colSpan={3} className="font-black text-center text-lg">
@@ -59,7 +59,7 @@ function Print() {
         </tbody>
       </table>
 
-      <table className=" table table-xs lg:table-sm  rounded-none my-2">
+      <table className=" table table-xs lg:table-sm  table-zebra rounded-none my-2">
         <thead className="bg-black/70 text-white">
           <tr>
             <th rowSpan={2}>No</th>
@@ -90,7 +90,7 @@ function Print() {
         <tbody>
           {dataRealisasi &&
             dataRealisasi.map((d, k) => (
-              <tr key={k}>
+              <tr key={k} className="break-after-auto break-inside-avoid">
                 <td className="text-xs">{k + 1}</td>
                 {selectedOPD <= 0 && (
                   <td className="text-xs">{d.nm_sub_unit}</td>
@@ -142,7 +142,7 @@ function Print() {
                 </td>
               </tr>
             ))}
-          <tr>
+          <tr className="!bg-black/70 !text-white">
             {selectedOPD <= 0 && <th className="bg-black/70"></th>}
             {selectedSBidang && Object.keys(selectedSBidang).length <= 0 && (
               <th className="bg-black/70"></th>

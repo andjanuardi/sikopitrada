@@ -23,6 +23,9 @@ export default function App({ Component, pageProps }) {
     return Component.getLayout(
       <>
         <Loader />
+        <Head>
+          <title>SIKOPITRADA</title>
+        </Head>
         <Component {...pageProps} />
       </>
     );

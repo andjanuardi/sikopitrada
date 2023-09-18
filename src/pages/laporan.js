@@ -332,13 +332,13 @@ function Laporan() {
           </select>
         </div>
         <div className=" btn-group col-span-2 flex justify-end">
-          <button
+          {/* <button
             className="btn btn-primary w-fit "
             onClick={() => setTampilLaporan(true)}
           >
             <FaTable />
             Tampilkan Laporan
-          </button>
+          </button> */}
           {Object.keys(dataRealisasi).length > 0 && (
             <>
               <button
