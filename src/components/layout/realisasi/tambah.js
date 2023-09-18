@@ -38,9 +38,10 @@ function Tambah({
   }, [kontraktual]);
 
   async function getDataSP2D(no_kontrak) {
-    await fetch(process.env.API_SIMDA + "/api/sp2dkontrak", {
+    await fetch("/api/simda/fetch", {
       method: "POST",
       body: JSON.stringify({
+        url: "/api/sp2dkontrak",
         db: session.data.db,
         tahun: session.data.ta,
         no_kontrak: no_kontrak,
@@ -606,6 +607,7 @@ export function PilihSP2D({ selectedOPD, setdataSP2D, dataSP2D, session }) {
   const [txtCari, setTextCari] = useState("");
   useEffect(() => {
     getDataSP2D({
+      url: "/api/sp2dcari",
       db: session.data.db,
       tahun: session.data.ta,
       kd_urusan: selectedOPD.kd_urusan,
