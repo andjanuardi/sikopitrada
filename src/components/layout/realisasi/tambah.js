@@ -132,7 +132,7 @@ function Tambah({
         getDataRealisasi({
           ta: data.ta,
           sbidang: true,
-          id_opd: selectedOPD,
+          id_opd: selectedOPD.id,
           id_sdana: parseInt(sdana.id),
         });
         Swal.fire("Sukses", "Data Berhasil Disimpan", "success");

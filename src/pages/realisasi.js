@@ -357,195 +357,205 @@ export default function Realisasi() {
           </div>
         )}
       </div>
-      <div className="overflow-x-auto">
-        <table className=" table table-xs lg:table-sm bg-base-200/20 rounded-none my-2">
-          <thead className="bg-black/40 text-white">
-            <tr>
-              <th rowSpan={2}>No</th>
-              {Object.keys(selectedOPD).length <= 0 && <th rowSpan={2}>OPD</th>}
-              {Object.keys(selectedSBidang).length <= 0 && (
-                <th rowSpan={2}>Sumber Dana</th>
-              )}
-              <th rowSpan={2}>Rincian Kegiatan</th>
-              <th rowSpan={2}>
-                Judul Nomor <br /> Tanggal Dokumen
-              </th>
-              <th rowSpan={2}>Pelaksana</th>
-              <th rowSpan={2}>Nilai Kontrak</th>
-              <th colSpan={4} className="text-center">
-                Penyaluran
-              </th>
-              <th rowSpan={2}>Total Penyaluran</th>
-              <th rowSpan={2}>Sisa</th>
-              <th rowSpan={2}>Persentase</th>
 
-              {Object.keys(selectedSBidang).length > 0 && (
-                <th className="text-right" rowSpan={2}>
-                  <button
-                    className=" btn btn-sm"
-                    onClick={() => {
-                      setopenModal(true);
-                    }}
-                  >
-                    Tambah
-                  </button>
+      {Object.keys(selectedSBidang).length > 0 && (
+        <button
+          className=" btn btn-primary btn-sm mt-2"
+          onClick={() => {
+            setopenModal(true);
+          }}
+        >
+          Tambah Realisasi
+        </button>
+      )}
+      {Object.keys(dataRealisasi).length > 0 && (
+        <div className="overflow-x-auto">
+          <table className=" table table-xs lg:table-sm bg-base-200/20 rounded-none my-2">
+            <thead className="bg-black/40 text-white">
+              <tr>
+                <th rowSpan={2}>No</th>
+                {Object.keys(selectedOPD).length <= 0 && (
+                  <th rowSpan={2}>OPD</th>
+                )}
+                {Object.keys(selectedSBidang).length <= 0 && (
+                  <th rowSpan={2}>Sumber Dana</th>
+                )}
+                <th rowSpan={2}>Rincian Kegiatan</th>
+                <th rowSpan={2}>
+                  Judul Nomor <br /> Tanggal Dokumen
                 </th>
-              )}
-            </tr>
-            <tr>
-              <th>Tahap I</th>
-              <th>Tahap II</th>
-              <th>Tahap III</th>
-              <th>Tahap VI</th>
-            </tr>
-          </thead>
-          <tbody>
-            {dataRealisasi &&
-              dataRealisasi.map((d, k) => (
-                <tr key={k}>
-                  <td className="text-xs">{k + 1}</td>
-                  {Object.keys(selectedOPD).length <= 0 && (
-                    <td className="text-xs">{d.nm_sub_unit}</td>
-                  )}
-                  {Object.keys(selectedSBidang).length <= 0 && (
-                    <td className="text-xs">
-                      {d.nama_sdana}
-                      {" > "}
-                      {d.nama_jdana}
-                      {" > "}
-                      <br />
-                      {d.nama_bidang}
-                      {" > "}
-                      {d.nama_sbidang}
-                    </td>
-                  )}
-                  <td className="text-xs">{d.keperluan}</td>
-                  <td className="text-xs">
-                    {d.no_kontrak}
-                    <br />
-                    {dateToTable(d.tgl_kontrak)}
-                  </td>
-                  <td className="text-xs">{d.nm_perusahaan}</td>
-                  <td className="text-right text-xs">
-                    {NumberFormat(d.nilai_kontrak)}
-                  </td>
-                  <td className="text-right text-xs">
-                    {NumberFormat(d.nilai1)}
-                  </td>
-                  <td className="text-right text-xs">
-                    {NumberFormat(d.nilai2)}
-                  </td>
-                  <td className="text-right text-xs">
-                    {NumberFormat(d.nilai3)}
-                  </td>
-                  <td className="text-right text-xs">
-                    {NumberFormat(d.nilai4)}
-                  </td>
-                  <td className="text-right text-xs">
-                    {NumberFormat(d.nilai1 + d.nilai2 + d.nilai3 + d.nilai4)}
-                  </td>
-                  <td className="text-right text-xs">
-                    {NumberFormat(
-                      d.nilai_kontrak -
-                        (d.nilai1 + d.nilai2 + d.nilai3 + d.nilai4)
+                <th rowSpan={2}>Pelaksana</th>
+                <th rowSpan={2}>Nilai Kontrak</th>
+                <th colSpan={4} className="text-center">
+                  Penyaluran
+                </th>
+                <th rowSpan={2}>Total Penyaluran</th>
+                <th rowSpan={2}>Sisa</th>
+                <th rowSpan={2}>Persentase</th>
+              </tr>
+              <tr>
+                <th>Tahap I</th>
+                <th>Tahap II</th>
+                <th>Tahap III</th>
+                <th>Tahap VI</th>
+              </tr>
+            </thead>
+            <tbody>
+              {dataRealisasi &&
+                dataRealisasi.map((d, k) => (
+                  <tr key={k}>
+                    <td className="text-xs">{k + 1}</td>
+                    {Object.keys(selectedOPD).length <= 0 && (
+                      <td className="text-xs">{d.nm_sub_unit}</td>
                     )}
-                  </td>
-                  <td className="text-xs">
-                    {((d.nilai1 + d.nilai2 + d.nilai3 + d.nilai4) /
-                      d.nilai_kontrak) *
-                      100}
-                    %
-                  </td>
-                  {Object.keys(selectedSBidang).length > 0 && (
-                    <td>
-                      <div className="btn-group">
-                        {/* <button className="btn btn-ghost">
+                    {Object.keys(selectedSBidang).length <= 0 && (
+                      <td className="text-xs">
+                        {d.nama_sdana}
+                        {" > "}
+                        {d.nama_jdana}
+                        {" > "}
+                        <br />
+                        {d.nama_bidang}
+                        {" > "}
+                        {d.nama_sbidang}
+                      </td>
+                    )}
+                    <td className="text-xs">{d.keperluan}</td>
+                    <td className="text-xs">
+                      {d.no_kontrak}
+                      <br />
+                      {dateToTable(d.tgl_kontrak)}
+                    </td>
+                    <td className="text-xs">{d.nm_perusahaan}</td>
+                    <td className="text-right text-xs">
+                      {NumberFormat(d.nilai_kontrak)}
+                    </td>
+                    <td className="text-right text-xs">
+                      {NumberFormat(d.nilai1)}
+                    </td>
+                    <td className="text-right text-xs">
+                      {NumberFormat(d.nilai2)}
+                    </td>
+                    <td className="text-right text-xs">
+                      {NumberFormat(d.nilai3)}
+                    </td>
+                    <td className="text-right text-xs">
+                      {NumberFormat(d.nilai4)}
+                    </td>
+                    <td className="text-right text-xs">
+                      {NumberFormat(d.nilai1 + d.nilai2 + d.nilai3 + d.nilai4)}
+                    </td>
+                    <td className="text-right text-xs">
+                      {NumberFormat(
+                        d.nilai_kontrak -
+                          (d.nilai1 + d.nilai2 + d.nilai3 + d.nilai4)
+                      )}
+                    </td>
+                    <td className="text-xs">
+                      {((d.nilai1 + d.nilai2 + d.nilai3 + d.nilai4) /
+                        d.nilai_kontrak) *
+                        100}
+                      %
+                    </td>
+                    {Object.keys(selectedSBidang).length > 0 && (
+                      <td>
+                        <div className="btn-group">
+                          {/* <button className="btn btn-ghost">
                           <FaEdit />
                         </button> */}
-                        <button
-                          className="btn btn-ghost"
-                          onClick={() =>
-                            Swal.fire({
-                              title: "Hapus?",
-                              text: `anda yakin ingin menghapus data ${d.keperluan}`,
-                              icon: "question",
-                              showCancelButton: true,
-                              cancelButtonText: "Batal",
-                              confirmButtonText: "Hapus",
-                            }).then(async (e) => {
-                              if (e.isConfirmed) {
-                                await fetch("/api/realisasi", {
-                                  method: "POST",
-                                  body: JSON.stringify({
-                                    d: true,
-                                    no_kontrak: d.no_kontrak,
-                                  }),
-                                });
-                                Swal.fire(
-                                  "Sukses",
-                                  "Data Berhasil di hapus",
-                                  "success"
-                                );
-                                getRealisasi("sbidang");
-                              }
-                            })
-                          }
-                        >
-                          <FaTrashAlt />
-                        </button>
-                      </div>
-                    </td>
+                          <button
+                            className="btn btn-ghost"
+                            onClick={() =>
+                              Swal.fire({
+                                title: "Hapus?",
+                                text: `anda yakin ingin menghapus data ${d.keperluan}`,
+                                icon: "question",
+                                showCancelButton: true,
+                                cancelButtonText: "Batal",
+                                confirmButtonText: "Hapus",
+                              }).then(async (e) => {
+                                if (e.isConfirmed) {
+                                  await fetch("/api/realisasi", {
+                                    method: "POST",
+                                    body: JSON.stringify({
+                                      d: true,
+                                      no_kontrak: d.no_kontrak,
+                                    }),
+                                  });
+                                  Swal.fire(
+                                    "Sukses",
+                                    "Data Berhasil di hapus",
+                                    "success"
+                                  );
+                                  getRealisasi("sbidang");
+                                }
+                              })
+                            }
+                          >
+                            <FaTrashAlt />
+                          </button>
+                        </div>
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              <tr>
+                <th className="bg-black/40 text-white text-center" colSpan={4}>
+                  Total
+                </th>
+                <th className="text-right">
+                  {NumberFormat(
+                    dataRealisasi.reduce((a, b) => a + b.nilai_kontrak, 0)
                   )}
-                </tr>
-              ))}
-            <tr>
-              <th className="bg-black/40 text-white text-center" colSpan={4}>
-                Total
-              </th>
-              <th className="text-right">
-                {NumberFormat(
-                  dataRealisasi.reduce((a, b) => a + b.nilai_kontrak, 0)
-                )}
-              </th>
-              <th className="text-right">
-                {NumberFormat(dataRealisasi.reduce((a, b) => a + b.nilai1, 0))}
-              </th>
-              <th className="text-right">
-                {NumberFormat(dataRealisasi.reduce((a, b) => a + b.nilai2, 0))}
-              </th>
-              <th className="text-right">
-                {NumberFormat(dataRealisasi.reduce((a, b) => a + b.nilai3, 0))}
-              </th>
-              <th className="text-right">
-                {NumberFormat(dataRealisasi.reduce((a, b) => a + b.nilai4, 0))}
-              </th>
-              <th className="text-right">
-                {NumberFormat(
-                  dataRealisasi.reduce(
-                    (a, b) => a + b.nilai1 + b.nilai2 + b.nilai3 + b.nilai4,
-                    0
-                  )
-                )}
-              </th>
-              <th className="text-right">
-                {NumberFormat(
-                  dataRealisasi.reduce(
-                    (a, b) =>
-                      a +
-                      b.nilai_kontrak -
-                      (b.nilai1 + b.nilai2 + b.nilai3 + b.nilai4),
-                    0
-                  )
-                )}
-              </th>
-              <th
-                colSpan={2}
-                className="bg-black/40 text-white text-center"
-              ></th>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+                </th>
+                <th className="text-right">
+                  {NumberFormat(
+                    dataRealisasi.reduce((a, b) => a + b.nilai1, 0)
+                  )}
+                </th>
+                <th className="text-right">
+                  {NumberFormat(
+                    dataRealisasi.reduce((a, b) => a + b.nilai2, 0)
+                  )}
+                </th>
+                <th className="text-right">
+                  {NumberFormat(
+                    dataRealisasi.reduce((a, b) => a + b.nilai3, 0)
+                  )}
+                </th>
+                <th className="text-right">
+                  {NumberFormat(
+                    dataRealisasi.reduce((a, b) => a + b.nilai4, 0)
+                  )}
+                </th>
+                <th className="text-right">
+                  {NumberFormat(
+                    dataRealisasi.reduce(
+                      (a, b) => a + b.nilai1 + b.nilai2 + b.nilai3 + b.nilai4,
+                      0
+                    )
+                  )}
+                </th>
+                <th className="text-right">
+                  {NumberFormat(
+                    dataRealisasi.reduce(
+                      (a, b) =>
+                        a +
+                        b.nilai_kontrak -
+                        (b.nilai1 + b.nilai2 + b.nilai3 + b.nilai4),
+                      0
+                    )
+                  )}
+                </th>
+                <th
+                  colSpan={2}
+                  className="bg-black/40 text-white text-center"
+                ></th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
