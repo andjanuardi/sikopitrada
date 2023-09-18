@@ -13,13 +13,18 @@ export default function OPD() {
   const { data: initialData, getData } = useFetch("/api/opd", "POST", {
     s: true,
   });
-  const { data: dataOPDSimda } = useSimda(`/api/unit`, "POST", {
-    db: session.data.db,
-  });
+  const { data: dataOPDSimda, getData: getDataOPDSimda } = useSimda(
+    `/api/unit`,
+    "POST",
+    {
+      db: session.data.db,
+    }
+  );
   const [data, setData] = useState([]);
 
   useEffect(() => {
     getData({ s: true });
+    getDataOPDSimda();
   }, []);
 
   useEffect(() => {

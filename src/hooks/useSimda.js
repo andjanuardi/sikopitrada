@@ -5,13 +5,14 @@ const useSimda = (url = "/api/hello", method = "POST", body = {}) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
+    body.url = url;
     getData(body);
   }, [method]);
 
   async function getData(body) {
     try {
       method === "GET" &&
-        (await fetch(process.env.API_SIMDA + url)
+        (await fetch("/api/simda/fetch")
           .then((e) => e.json())
           .then((d) => {
             if (d) {
@@ -24,7 +25,7 @@ const useSimda = (url = "/api/hello", method = "POST", body = {}) => {
             err != undefined && Swal.fire("Opps", `Terjadi Kesalahan`, "error");
           }));
       method === "POST" &&
-        (await fetch(process.env.API_SIMDA + url, {
+        (await fetch("/api/simda/fetch", {
           method: method,
           body: JSON.stringify(body),
         })
