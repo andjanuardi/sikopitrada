@@ -102,6 +102,15 @@ export default function Realisasi() {
         getRealisasi("bidang");
       }
     }
+    getDataKontrak({
+      url: "/api/kontrak",
+      db: session.data.db,
+      tahun: session.data.ta,
+      kd_urusan: dataselectedOPD.kd_urusan,
+      kd_bidang: dataselectedOPD.kd_bidang,
+      kd_unit: dataselectedOPD.kd_unit,
+      kd_sub: dataselectedOPD.kd_sub,
+    });
   }, [selectedSBidang]);
 
   function getRealisasi(level = "opd") {
@@ -162,6 +171,7 @@ export default function Realisasi() {
   }, []);
 
   useEffect(() => {
+    setSelectedSdana(0);
     if (selectedOPD > 0) {
       getDataSumberDana({ opd: true, id: selectedOPD });
       setDataSelectedOPD(dataOPD.filter((e) => e.id === selectedOPD)[0]);
