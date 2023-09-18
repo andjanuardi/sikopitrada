@@ -29,7 +29,9 @@ export default function Beranda() {
   useEffect(() => {
     getStat();
   }, []);
+
   useEffect(() => {
+    console.log(statData.stat);
     setStat({ stat: statData.stat && statData.stat[0], sdana: statData.sdana });
   }, [statData]);
 
@@ -124,10 +126,9 @@ export default function Beranda() {
             stat.sdana.map(
               (e) =>
                 stat.stat &&
-                stat.stat.reduce(
-                  (a, b) => b.nama_sdana === e.nama_sdana && a + b.nilaitotal,
-                  0
-                )
+                stat.stat
+                  .filter((a) => a.nama_sdana === e.nama_sdana)
+                  .reduce((a, b) => a + b.nilaitotal, 0)
             ),
           backgroundColor: faker.color.rgb(),
         },
@@ -138,10 +139,9 @@ export default function Beranda() {
             stat.sdana.map(
               (e) =>
                 stat.stat &&
-                stat.stat.reduce(
-                  (a, b) => b.nama_sdana === e.nama_sdana && a + b.nilai1,
-                  0
-                )
+                stat.stat
+                  .filter((a) => a.nama_sdana === e.nama_sdana)
+                  .reduce((a, b) => a + b.nilai1, 0)
             ),
           backgroundColor: faker.color.rgb(),
         },
@@ -152,10 +152,9 @@ export default function Beranda() {
             stat.sdana.map(
               (e) =>
                 stat.stat &&
-                stat.stat.reduce(
-                  (a, b) => b.nama_sdana === e.nama_sdana && a + b.nilai2,
-                  0
-                )
+                stat.stat
+                  .filter((a) => a.nama_sdana === e.nama_sdana)
+                  .reduce((a, b) => a + b.nilai2, 0)
             ),
           backgroundColor: faker.color.rgb(),
         },
@@ -166,10 +165,9 @@ export default function Beranda() {
             stat.sdana.map(
               (e) =>
                 stat.stat &&
-                stat.stat.reduce(
-                  (a, b) => b.nama_sdana === e.nama_sdana && a + b.nilai3,
-                  0
-                )
+                stat.stat
+                  .filter((a) => a.nama_sdana === e.nama_sdana)
+                  .reduce((a, b) => a + b.nilai3, 0)
             ),
           backgroundColor: faker.color.rgb(),
         },
@@ -180,10 +178,9 @@ export default function Beranda() {
             stat.sdana.map(
               (e) =>
                 stat.stat &&
-                stat.stat.reduce(
-                  (a, b) => b.nama_sdana === e.nama_sdana && a + b.nilai4,
-                  0
-                )
+                stat.stat
+                  .filter((a) => a.nama_sdana === e.nama_sdana)
+                  .reduce((a, b) => a + b.nilai4, 0)
             ),
           backgroundColor: faker.color.rgb(),
         },
@@ -194,10 +191,9 @@ export default function Beranda() {
             stat.sdana.map(
               (e) =>
                 stat.stat &&
-                stat.stat.reduce(
-                  (a, b) => b.nama_sdana === e.nama_sdana && a + b.sisa,
-                  0
-                )
+                stat.stat
+                  .filter((a) => a.nama_sdana === e.nama_sdana)
+                  .reduce((a, b) => a + b.sisa, 0)
             ),
           backgroundColor: faker.color.rgb(),
         },
@@ -220,11 +216,9 @@ export default function Beranda() {
               >
                 {new Intl.NumberFormat("id-ID").format(
                   stat.stat &&
-                    (stat.stat.reduce(
-                      (a, b) =>
-                        b.nama_sdana === d.nama_sdana && a + b.nilaitotal,
-                      0
-                    ) /
+                    (stat.stat
+                      .filter((e) => e.nama_sdana === d.nama_sdana)
+                      .reduce((a, b) => a + b.nilaitotal, 0) /
                       d.nilai) *
                       100
                 )}{" "}
@@ -237,11 +231,9 @@ export default function Beranda() {
                 Rp.{""}
                 {new Intl.NumberFormat("id-ID").format(
                   stat.stat &&
-                    stat.stat.reduce(
-                      (a, b) =>
-                        b.nama_sdana === d.nama_sdana && a + b.nilaitotal,
-                      0
-                    )
+                    stat.stat
+                      .filter((e) => e.nama_sdana === d.nama_sdana)
+                      .reduce((a, b) => a + b.nilaitotal, 0)
                 )}
               </div>
               <div className="stat-desc mt-2">
