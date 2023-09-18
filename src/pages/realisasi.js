@@ -23,18 +23,23 @@ export default function Realisasi() {
     "POST"
   );
 
-  const { data: dataKontrak, getData: getDataKontrak } = useSimda(
-    "/api/kontrak",
-    "POST",
-    {
-      db: session.data.db,
-      tahun: session.data.ta,
-      kd_urusan: session.data.kd_urusan,
-      kd_bidang: session.data.kd_bidang,
-      kd_unit: session.data.kd_unit,
-      kd_sub: session.data.kd_sub,
-    }
+  const { data: dataKontrak, getData: getDataKontrak } = useFetch(
+    "/api/simda/fetch",
+    "POST"
   );
+
+  // const { data: dataKontrak, getData: getDataKontrak } = useSimda(
+  //   "/api/kontrak",
+  //   "POST",
+  //   {
+  //     db: session.data.db,
+  //     tahun: session.data.ta,
+  //     kd_urusan: session.data.kd_urusan,
+  //     kd_bidang: session.data.kd_bidang,
+  //     kd_unit: session.data.kd_unit,
+  //     kd_sub: session.data.kd_sub,
+  //   }
+  // );
 
   const [selectedOPD, setSelectedOPD] = useState(session.data.id_opd);
   const [dataselectedOPD, setDataSelectedOPD] = useState([]);
@@ -159,6 +164,15 @@ export default function Realisasi() {
   useEffect(() => {
     getDataOPD({ s: true });
     setSelectedOPD(session.data.id_opd);
+    getDataKontrak({
+      url: "/api/kontrak",
+      db: session.data.db,
+      tahun: session.data.ta,
+      kd_urusan: session.data.kd_urusan,
+      kd_bidang: session.data.kd_bidang,
+      kd_unit: session.data.kd_unit,
+      kd_sub: session.data.kd_sub,
+    });
   }, []);
 
   useEffect(() => {
