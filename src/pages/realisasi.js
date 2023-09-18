@@ -102,15 +102,23 @@ export default function Realisasi() {
         getRealisasi("bidang");
       }
     }
-    getDataKontrak({
-      url: "/api/kontrak",
-      db: session.data.db,
-      tahun: session.data.ta,
-      kd_urusan: dataselectedOPD.kd_urusan,
-      kd_bidang: dataselectedOPD.kd_bidang,
-      kd_unit: dataselectedOPD.kd_unit,
-      kd_sub: dataselectedOPD.kd_sub,
-    });
+    console.log(
+      typeof dataselectedOPD === "object" && Object.keys(dataselectedOPD).length
+    );
+    if (
+      typeof dataselectedOPD === "object" &&
+      Object.keys(dataselectedOPD).length > 0
+    ) {
+      getDataKontrak({
+        url: "/api/kontrak",
+        db: session.data.db,
+        tahun: session.data.ta,
+        kd_urusan: dataselectedOPD.kd_urusan,
+        kd_bidang: dataselectedOPD.kd_bidang,
+        kd_unit: dataselectedOPD.kd_unit,
+        kd_sub: dataselectedOPD.kd_sub,
+      });
+    }
   }, [selectedSBidang]);
 
   function getRealisasi(level = "opd") {
