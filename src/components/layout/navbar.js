@@ -6,7 +6,7 @@ import { signOut, useSession } from "next-auth/react";
 function Navbar({ activeMenu, setActiveMenu }) {
   const session = useSession();
   return (
-    <div className="flex items-center p-5 h-[var(--h-menu)] shadow-md bg-white print:hidden ">
+    <div className="flex items-center p-5 h-[var(--h-menu)] shadow-md bg-white  ">
       <div className="flex-1 flex items-center gap-4   ">
         <label className="btn btn-circle swap swap-rotate ">
           <input

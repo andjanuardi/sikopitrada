@@ -17,6 +17,7 @@ function Laporan() {
   const selectjdana = useRef();
   const selectbidang = useRef();
   const selectsbidang = useRef();
+
   const { data: dataOPD, getData: getDataOPD } = useFetch("/api/opd", "POST", {
     s: true,
   });
@@ -331,13 +332,13 @@ function Laporan() {
           </select>
         </div>
         <div className=" btn-group col-span-2 flex justify-end">
-          {/* <button
+          <button
             className="btn btn-primary w-fit "
             onClick={() => setTampilLaporan(true)}
           >
             <FaTable />
             Tampilkan Laporan
-          </button> */}
+          </button>
           {Object.keys(dataRealisasi).length > 0 && (
             <>
               <button
@@ -361,7 +362,27 @@ function Laporan() {
         </div>
       </div>
       <div>
-        <form method="GET" action="/print" target="_blank">
+        <form
+          method="POST"
+          onSubmit={(e) => {
+            e.preventDefault();
+            const dataprint = {
+              data: e.currentTarget.data.value,
+              dataOPD: e.currentTarget.dataOPD.value,
+              selectedOPD: e.currentTarget.selectedOPD.value,
+              datasdana: e.currentTarget.datasdana.value,
+              datajdana: e.currentTarget.datajdana.value,
+              databidang: e.currentTarget.databidang.value,
+              datasbidang: e.currentTarget.datasbidang.value,
+              datapenandatangan: e.currentTarget.datapenandatangan.value,
+              selectedSBidang: e.currentTarget.selectedSBidang.value,
+            };
+            localStorage.setItem("print", JSON.stringify(dataprint));
+            e.currentTarget.submit();
+          }}
+          action="/print"
+          target="_blank"
+        >
           <input hidden name="data" value={JSON.stringify(dataRealisasi)} />
           <input
             hidden
@@ -435,7 +456,7 @@ function Laporan() {
           <div className="divider">LAPORAN</div>
 
           <div className="overflow-x-auto">
-            <table className=" table table-xs lg:table-sm bg-base-200/20 rounded-none my-2 ">
+            <table className=" table table-xs lg:table-sm bg-base-200/20 rounded-none my-2 print:!block ">
               <thead className="bg-black/40 text-white">
                 <tr>
                   <th rowSpan={2}>No</th>

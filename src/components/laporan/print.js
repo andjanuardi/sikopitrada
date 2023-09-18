@@ -3,28 +3,31 @@ import NumberFormat from "@/functions/numberformat";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { QRCodeSVG } from "qrcode.react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-function Print() {
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    setData(JSON.parse(localStorage.getItem("print")));
-  }, []);
-  const router = useRouter();
+function Print(
+  dataOPD,
+  dataPenandaTangan,
+  dataRealisasi,
+  selectedOPD,
+  selectedSBidang
+) {
+  // const router = useRouter();
+  // const data = router.query;
 
-  const dataOPD = data.dataOPD;
-  const dataPenandaTangan = data.datapenandatangan
-    ? JSON.parse(data.datapenandatangan)
-    : [];
-  const dataRealisasi = data.data ? JSON.parse(data.data) : [];
-  const selectedOPD = data.selectedOPD;
-  const selectedSBidang = data.selectedSBidang
-    ? JSON.parse(data.selectedSBidang)
-    : [];
+  // const dataOPD = data.dataOPD;
+  // const dataPenandaTangan = data.datapenandatangan
+  //   ? JSON.parse(data.datapenandatangan)
+  //   : [];
+  // const dataRealisasi = data.data ? JSON.parse(data.data) : [];
+  // const selectedOPD = data.selectedOPD;
+  // const selectedSBidang = data.selectedSBidang
+  //   ? JSON.parse(data.selectedSBidang)
+  //   : [];
 
-  useEffect(() => {
-    window.print();
-  }, [data]);
+  // useEffect(() => {
+  //   window.print();
+  // }, [dataRealisasi]);
 
   return (
     <div className="bg-white">

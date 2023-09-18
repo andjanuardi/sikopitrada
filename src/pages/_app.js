@@ -35,7 +35,7 @@ export default function App({ Component, pageProps }) {
       </Head>
       <Loader />
 
-      <div className={`overflow-x-hidden  ${activeMenu}`}>
+      <div className={`overflow-x-hidden print:hidden ${activeMenu}`}>
         <motion.div
           animate={activeMenu ? "open" : "close"}
           variants={{
@@ -50,12 +50,12 @@ export default function App({ Component, pageProps }) {
           }}
           className="flex "
         >
-          <div className="w-[var(--w-menu)] grid ">
+          <div className="w-[var(--w-menu)] grid  ">
             <Sidebar setActiveMenu={setActiveMenu} />
           </div>
           <div className="flex-1 flex flex-col ">
             <Navbar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
-            <div className="flex mx-6 my-3 justify-between print:hidden">
+            <div className="flex mx-6 my-3 justify-between ">
               {pageData && (
                 <div className="flex gap-2 items-center font-black">
                   {pageData.icon} {pageData.label}
@@ -86,7 +86,7 @@ export default function App({ Component, pageProps }) {
                 </ul>
               </div>
             </div>
-            <div className="flex justify-center  ">
+            <div className="flex justify-center   ">
               <div className=" py-2  rounded-lg px-3 max-w-[95vw] mx-3 lg:max-w-[98vw]  flex-1 shadow-md bg-white  ">
                 <Component {...pageProps} />
               </div>

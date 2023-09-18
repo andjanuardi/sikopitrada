@@ -113,7 +113,7 @@ function Sidebar({ setActiveMenu }) {
                   className="font-bold my-1 "
                   onClick={() => {
                     router.push(d.link);
-                    // setActiveMenu(false);
+                    setActiveMenu(false);
                   }}
                 >
                   <Link
